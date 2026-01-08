@@ -12,6 +12,11 @@ import TestimonialsSection from "@/components/TestimonialsSection";
 import ResumeSection from "@/components/ResumeSection";
 import ContactSection from "@/components/ContactSection";
 import Footer from "@/components/Footer";
+import ClientLogosSection from "@/components/ClientLogosSection";
+import FAQSection from "@/components/FAQSection";
+import TimelineSection from "@/components/TimelineSection";
+import CustomCursor from "@/components/CustomCursor";
+import ScrollProgress from "@/components/ScrollProgress";
 
 const Index = () => {
   const [isLoading, setIsLoading] = useState(true);
@@ -32,6 +37,12 @@ const Index = () => {
             animate={{ opacity: 1 }}
             transition={{ duration: 0.8, delay: 0.2 }}
           >
+            {/* Custom Cursor */}
+            <CustomCursor />
+            
+            {/* Scroll Progress */}
+            <ScrollProgress />
+            
             {/* Grain Overlay */}
             <div className="grain-overlay" />
             
@@ -42,10 +53,13 @@ const Index = () => {
             <main>
               <HeroSection />
               <AboutSection />
+              <ClientLogosSection />
               <SkillsSection />
               <ProjectsSection />
+              <TimelineSection />
               <AchievementsSection />
               <WorkWithMeSection />
+              <FAQSection />
               <TestimonialsSection />
               <ResumeSection />
               <ContactSection />
