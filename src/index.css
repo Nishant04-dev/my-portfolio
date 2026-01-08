@@ -6,6 +6,48 @@
 
 @layer base {
   :root {
+    /* Light theme */
+    --background: 0 0% 98%;
+    --foreground: 0 0% 9%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 0 0% 9%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 0 0% 9%;
+
+    /* Crimson Netflix Red */
+    --primary: 357 83% 47%;
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 0 0% 94%;
+    --secondary-foreground: 0 0% 9%;
+
+    --muted: 0 0% 90%;
+    --muted-foreground: 0 0% 40%;
+
+    --accent: 357 83% 47%;
+    --accent-foreground: 0 0% 100%;
+
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 98%;
+
+    --border: 0 0% 85%;
+    --input: 0 0% 90%;
+    --ring: 357 83% 47%;
+
+    --radius: 0.5rem;
+
+    /* Custom tokens - Light */
+    --glow-primary: 0 0% 0% / 0;
+    --gradient-hero: linear-gradient(180deg, transparent 0%, hsl(0 0% 98%) 100%);
+    --gradient-card: linear-gradient(145deg, hsl(0 0% 100%) 0%, hsl(0 0% 96%) 100%);
+    --gradient-red: linear-gradient(135deg, hsl(357 83% 47%) 0%, hsl(357 90% 35%) 100%);
+    --shadow-glow: 0 0 40px hsl(357 83% 47% / 0.2);
+    --shadow-card: 0 8px 32px hsl(0 0% 0% / 0.1);
+  }
+
+  .dark {
     /* Netflix-inspired dark theme */
     --background: 0 0% 4%;
     --foreground: 0 0% 98%;
@@ -36,9 +78,7 @@
     --input: 0 0% 15%;
     --ring: 357 83% 47%;
 
-    --radius: 0.5rem;
-
-    /* Custom tokens */
+    /* Custom tokens - Dark */
     --glow-primary: 0 0% 0% / 0;
     --gradient-hero: linear-gradient(180deg, transparent 0%, hsl(0 0% 4%) 100%);
     --gradient-card: linear-gradient(145deg, hsl(0 0% 10%) 0%, hsl(0 0% 6%) 100%);
@@ -46,16 +86,11 @@
     --shadow-glow: 0 0 40px hsl(357 83% 47% / 0.3);
     --shadow-card: 0 8px 32px hsl(0 0% 0% / 0.4);
   }
-
-  .dark {
-    --background: 0 0% 4%;
-    --foreground: 0 0% 98%;
-  }
 }
 
 @layer base {
   * {
-    @apply border-border;
+    @apply border-border transition-colors duration-300;
   }
 
   html {
@@ -65,6 +100,7 @@
   body {
     @apply bg-background text-foreground font-sans antialiased;
     font-family: 'Inter', sans-serif;
+    transition: background-color 0.4s ease, color 0.4s ease;
   }
 
   h1, h2, h3, .font-display {
