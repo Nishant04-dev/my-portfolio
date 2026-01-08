@@ -17,60 +17,68 @@ import FAQSection from "@/components/FAQSection";
 import TimelineSection from "@/components/TimelineSection";
 import CustomCursor from "@/components/CustomCursor";
 import ScrollProgress from "@/components/ScrollProgress";
+import ThemeSoundToggle from "@/components/ThemeSoundToggle";
+import { ThemeProvider } from "@/hooks/useTheme";
+import { SoundProvider } from "@/hooks/useSoundEffects";
 
 const Index = () => {
   const [isLoading, setIsLoading] = useState(true);
 
   return (
-    <>
-      <AnimatePresence mode="wait">
-        {isLoading && (
-          <LoadingScreen onLoadingComplete={() => setIsLoading(false)} />
-        )}
-      </AnimatePresence>
+    <ThemeProvider>
+      <SoundProvider>
+        <AnimatePresence mode="wait">
+          {isLoading && (
+            <LoadingScreen onLoadingComplete={() => setIsLoading(false)} />
+          )}
+        </AnimatePresence>
 
-      <AnimatePresence>
-        {!isLoading && (
-          <motion.div
-            className="min-h-screen bg-background text-foreground"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 0.8, delay: 0.2 }}
-          >
-            {/* Custom Cursor */}
-            <CustomCursor />
-            
-            {/* Scroll Progress */}
-            <ScrollProgress />
-            
-            {/* Grain Overlay */}
-            <div className="grain-overlay" />
-            
-            {/* Navigation */}
-            <Navbar />
+        <AnimatePresence>
+          {!isLoading && (
+            <motion.div
+              className="min-h-screen bg-background text-foreground"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 0.8, delay: 0.2 }}
+            >
+              {/* Custom Cursor */}
+              <CustomCursor />
+              
+              {/* Scroll Progress */}
+              <ScrollProgress />
+              
+              {/* Theme & Sound Toggle */}
+              <ThemeSoundToggle />
+              
+              {/* Grain Overlay */}
+              <div className="grain-overlay" />
+              
+              {/* Navigation */}
+              <Navbar />
 
-            {/* Main Content */}
-            <main>
-              <HeroSection />
-              <AboutSection />
-              <ClientLogosSection />
-              <SkillsSection />
-              <ProjectsSection />
-              <TimelineSection />
-              <AchievementsSection />
-              <WorkWithMeSection />
-              <FAQSection />
-              <TestimonialsSection />
-              <ResumeSection />
-              <ContactSection />
-            </main>
+              {/* Main Content */}
+              <main>
+                <HeroSection />
+                <AboutSection />
+                <ClientLogosSection />
+                <SkillsSection />
+                <ProjectsSection />
+                <TimelineSection />
+                <AchievementsSection />
+                <WorkWithMeSection />
+                <FAQSection />
+                <TestimonialsSection />
+                <ResumeSection />
+                <ContactSection />
+              </main>
 
-            {/* Footer */}
-            <Footer />
-          </motion.div>
-        )}
-      </AnimatePresence>
-    </>
+              {/* Footer */}
+              <Footer />
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </SoundProvider>
+    </ThemeProvider>
   );
 };
 

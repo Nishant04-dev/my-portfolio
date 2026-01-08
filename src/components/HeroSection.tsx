@@ -1,30 +1,50 @@
-import { motion } from "framer-motion";
+import { useRef } from "react";
+import { motion, useScroll, useTransform } from "framer-motion";
 import { Play, Mail } from "lucide-react";
 import nishantImage from "@/assets/nishant.jpg";
+import { useSoundEffects } from "@/hooks/useSoundEffects";
 
 const HeroSection = () => {
+  const ref = useRef(null);
+  const { scrollYProgress } = useScroll({
+    target: ref,
+    offset: ["start start", "end start"],
+  });
+
+  const y = useTransform(scrollYProgress, [0, 1], [0, 300]);
+  const opacity = useTransform(scrollYProgress, [0, 0.5], [1, 0]);
+  const scale = useTransform(scrollYProgress, [0, 0.5], [1, 1.1]);
+  const textY = useTransform(scrollYProgress, [0, 1], [0, 150]);
+
+  const { playHover, playClick } = useSoundEffects();
+
   const scrollToProjects = () => {
+    playClick();
     document.getElementById("projects")?.scrollIntoView({ behavior: "smooth" });
   };
 
   const scrollToContact = () => {
+    playClick();
     document.getElementById("contact")?.scrollIntoView({ behavior: "smooth" });
   };
 
   return (
-    <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
-      {/* Background with gradient overlay */}
-      <div className="absolute inset-0">
+    <section ref={ref} className="relative min-h-screen flex items-center justify-center overflow-hidden">
+      {/* Parallax Background */}
+      <motion.div className="absolute inset-0" style={{ y, scale }}>
         <div 
           className="absolute inset-0 bg-cover bg-center bg-no-repeat opacity-40"
           style={{ backgroundImage: `url(${nishantImage})` }}
         />
         <div className="hero-gradient absolute inset-0" />
         <div className="absolute inset-0 bg-gradient-to-r from-background via-transparent to-background" />
-      </div>
+      </motion.div>
 
-      {/* Content */}
-      <div className="relative z-10 container mx-auto px-4 md:px-8 flex flex-col md:flex-row items-center justify-between gap-12">
+      {/* Content with parallax */}
+      <motion.div 
+        className="relative z-10 container mx-auto px-4 md:px-8 flex flex-col md:flex-row items-center justify-between gap-12"
+        style={{ y: textY, opacity }}
+      >
         {/* Text Content */}
         <motion.div 
           className="flex-1 text-center md:text-left"
@@ -89,6 +109,7 @@ const HeroSection = () => {
           >
             <button 
               onClick={scrollToProjects}
+              onMouseEnter={playHover}
               className="btn-primary flex items-center justify-center gap-2 group"
             >
               <Play className="w-5 h-5 group-hover:scale-110 transition-transform" fill="currentColor" />
@@ -96,6 +117,7 @@ const HeroSection = () => {
             </button>
             <button 
               onClick={scrollToContact}
+              onMouseEnter={playHover}
               className="btn-secondary flex items-center justify-center gap-2"
             >
               <Mail className="w-5 h-5" />
@@ -104,7 +126,7 @@ const HeroSection = () => {
           </motion.div>
         </motion.div>
 
-        {/* Profile Image */}
+        {/* Profile Image with parallax */}
         <motion.div 
           className="flex-shrink-0"
           initial={{ opacity: 0, scale: 0.8 }}
@@ -128,7 +150,7 @@ const HeroSection = () => {
             />
           </div>
         </motion.div>
-      </div>
+      </motion.div>
 
       {/* Scroll indicator */}
       <motion.div 
@@ -136,6 +158,7 @@ const HeroSection = () => {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1, y: [0, 10, 0] }}
         transition={{ opacity: { delay: 1.5 }, y: { duration: 2, repeat: Infinity } }}
+        style={{ opacity }}
       >
         <div className="w-6 h-10 rounded-full border-2 border-muted-foreground/50 flex justify-center">
           <motion.div 

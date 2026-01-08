@@ -1,10 +1,12 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Menu, X } from "lucide-react";
+import { useSoundEffects } from "@/hooks/useSoundEffects";
 
 const Navbar = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const { playHover, playClick } = useSoundEffects();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -19,13 +21,14 @@ const Navbar = () => {
     { label: "About", href: "#about" },
     { label: "Skills", href: "#skills" },
     { label: "Projects", href: "#projects" },
+    { label: "Journey", href: "#journey" },
     { label: "Services", href: "#services" },
-    { label: "Testimonials", href: "#testimonials" },
-    { label: "Resume", href: "#resume" },
+    { label: "FAQ", href: "#faq" },
     { label: "Contact", href: "#contact" },
   ];
 
   const handleNavClick = (href: string) => {
+    playClick();
     setIsMobileMenuOpen(false);
     const element = document.querySelector(href);
     if (element) {
@@ -36,7 +39,7 @@ const Navbar = () => {
   return (
     <>
       <motion.nav
-        className={`fixed top-0 left-0 right-0 z-40 transition-all duration-300 ${
+        className={`fixed top-1 left-0 right-0 z-40 transition-all duration-300 ${
           isScrolled 
             ? "bg-background/95 backdrop-blur-md border-b border-border" 
             : "bg-transparent"
@@ -53,8 +56,10 @@ const Navbar = () => {
               className="font-display text-xl md:text-2xl tracking-wide hover:text-primary transition-colors"
               onClick={(e) => {
                 e.preventDefault();
+                playClick();
                 window.scrollTo({ top: 0, behavior: "smooth" });
               }}
+              onMouseEnter={playHover}
             >
               <span className="text-primary">N</span>ISHANT
             </a>
@@ -69,6 +74,7 @@ const Navbar = () => {
                     e.preventDefault();
                     handleNavClick(link.href);
                   }}
+                  onMouseEnter={playHover}
                   className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors animated-underline"
                 >
                   {link.label}
@@ -79,7 +85,10 @@ const Navbar = () => {
             {/* Mobile Menu Button */}
             <button
               className="lg:hidden p-2 text-foreground"
-              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+              onClick={() => {
+                playClick();
+                setIsMobileMenuOpen(!isMobileMenuOpen);
+              }}
               aria-label="Toggle menu"
             >
               {isMobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
