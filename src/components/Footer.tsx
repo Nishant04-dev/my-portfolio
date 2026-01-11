@@ -1,13 +1,12 @@
 import { motion } from "framer-motion";
-import { Github, Linkedin, Twitter, Instagram, Mail, Heart } from "lucide-react";
+import { Github, Linkedin, Instagram, Mail, Heart } from "lucide-react";
 
 const Footer = () => {
   const socialLinks = [
-    { icon: Github, href: "https://github.com", label: "GitHub" },
-    { icon: Linkedin, href: "https://linkedin.com", label: "LinkedIn" },
-    { icon: Twitter, href: "https://twitter.com", label: "Twitter" },
-    { icon: Instagram, href: "https://instagram.com", label: "Instagram" },
-    { icon: Mail, href: "mailto:nishant@vanguard.ind.in", label: "Email" },
+    { icon: Github, href: "https://github.com/Nishant04-dev", label: "GitHub" },
+    { icon: Linkedin, href: "https://www.linkedin.com/in/nishant-chauhan-a71002367", label: "LinkedIn" },
+    { icon: Instagram, href: "https://www.instagram.com/vg_nishantchauhan", label: "Instagram" },
+    { icon: Mail, href: "mailto:Info@nishantchauhan.site", label: "Email" },
   ];
 
   const quickLinks = [
@@ -93,8 +92,8 @@ const Footer = () => {
             <ul className="space-y-2 text-muted-foreground text-sm">
               <li>📍 Gurugram, Haryana, India</li>
               <li>
-                <a href="mailto:nishant@vanguard.ind.in" className="hover:text-primary transition-colors">
-                  📧 nishant@vanguard.ind.in
+                <a href="mailto:Info@nishantchauhan.site" className="hover:text-primary transition-colors">
+                  📧 Info@nishantchauhan.site
                 </a>
               </li>
               <li>
