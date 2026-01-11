@@ -1,39 +1,104 @@
 import { motion, useInView } from "framer-motion";
-import { useRef } from "react";
+import { useRef, useEffect, useState } from "react";
 import { Users, Bot, Trophy, Gamepad2, Globe } from "lucide-react";
 
-const achievements = [
+interface Achievement {
+  icon: typeof Globe;
+  value: number | string;
+  suffix: string;
+  label: string;
+  color: string;
+  isNumeric: boolean;
+}
+
+const achievements: Achievement[] = [
   {
     icon: Globe,
-    value: "1,50,000+",
+    value: 150000,
+    suffix: "+",
     label: "Users Reached",
     color: "text-blue-400",
+    isNumeric: true,
   },
   {
     icon: Bot,
-    value: "20+",
+    value: 20,
+    suffix: "+",
     label: "Bot Clients",
     color: "text-purple-400",
+    isNumeric: true,
   },
   {
     icon: Users,
-    value: "10,000+",
+    value: 10000,
+    suffix: "+",
     label: "Community Members",
     color: "text-green-400",
+    isNumeric: true,
   },
   {
     icon: Trophy,
     value: "Multiple",
+    suffix: "",
     label: "BGMI Tournaments",
     color: "text-yellow-400",
+    isNumeric: false,
   },
   {
     icon: Gamepad2,
     value: "Hosted",
+    suffix: "",
     label: "Offline Esports Events",
     color: "text-primary",
+    isNumeric: false,
   },
 ];
+
+const formatNumber = (num: number): string => {
+  if (num >= 100000) {
+    return `${(num / 100000).toFixed(0)},${String(num % 100000).padStart(5, '0').slice(0, 2)},${String(num).slice(-3)}`;
+  }
+  if (num >= 1000) {
+    return num.toLocaleString('en-IN');
+  }
+  return num.toString();
+};
+
+const AnimatedCounter = ({ 
+  target, 
+  suffix, 
+  isInView 
+}: { 
+  target: number; 
+  suffix: string; 
+  isInView: boolean;
+}) => {
+  const [count, setCount] = useState(0);
+  
+  useEffect(() => {
+    if (!isInView) return;
+    
+    const duration = 2000;
+    const steps = 60;
+    const stepTime = duration / steps;
+    const increment = target / steps;
+    
+    let current = 0;
+    const timer = setInterval(() => {
+      current += increment;
+      if (current >= target) {
+        setCount(target);
+        clearInterval(timer);
+      } else {
+        setCount(Math.floor(current));
+      }
+    }, stepTime);
+    
+    return () => clearInterval(timer);
+  }, [isInView, target]);
+  
+  return <>{formatNumber(count)}{suffix}</>;
+};
 
 const AchievementsSection = () => {
   const ref = useRef(null);
@@ -74,7 +139,15 @@ const AchievementsSection = () => {
                 animate={isInView ? { opacity: 1 } : {}}
                 transition={{ duration: 0.5, delay: 0.3 + index * 0.1 }}
               >
-                {achievement.value}
+                {achievement.isNumeric ? (
+                  <AnimatedCounter 
+                    target={achievement.value as number} 
+                    suffix={achievement.suffix}
+                    isInView={isInView}
+                  />
+                ) : (
+                  <>{achievement.value}{achievement.suffix}</>
+                )}
               </motion.div>
               
               <p className="text-sm text-muted-foreground">{achievement.label}</p>
