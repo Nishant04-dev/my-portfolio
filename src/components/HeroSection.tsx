@@ -3,6 +3,10 @@ import { motion, useScroll, useTransform } from "framer-motion";
 import { Play, Mail } from "lucide-react";
 import nishantImage from "@/assets/nishant.jpg";
 import { useSoundEffects } from "@/hooks/useSoundEffects";
+import { useTypingEffect } from "@/hooks/useTypingEffect";
+import ParticleBackground from "./ParticleBackground";
+
+const roles = ["Entrepreneur", "Developer", "Esports Founder", "Bot Creator", "Tech Enthusiast"];
 
 const HeroSection = () => {
   const ref = useRef(null);
@@ -17,6 +21,7 @@ const HeroSection = () => {
   const textY = useTransform(scrollYProgress, [0, 1], [0, 150]);
 
   const { playHover, playClick } = useSoundEffects();
+  const { currentText } = useTypingEffect(roles, 100, 50, 2000);
 
   const scrollToProjects = () => {
     playClick();
@@ -30,8 +35,11 @@ const HeroSection = () => {
 
   return (
     <section ref={ref} className="relative min-h-screen flex items-center justify-center overflow-hidden">
+      {/* Particle Background */}
+      <ParticleBackground />
+
       {/* Parallax Background */}
-      <motion.div className="absolute inset-0" style={{ y, scale }}>
+      <motion.div className="absolute inset-0 z-[1]" style={{ y, scale }}>
         <div 
           className="absolute inset-0 bg-cover bg-center bg-no-repeat opacity-40"
           style={{ backgroundImage: `url(${nishantImage})` }}
@@ -90,16 +98,22 @@ const HeroSection = () => {
             </motion.h1>
           </div>
 
-          <motion.p 
-            className="text-lg md:text-xl text-muted-foreground mb-8 max-w-xl"
+          {/* Typing Animation */}
+          <motion.div 
+            className="h-8 md:h-10 mb-8"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.8 }}
           >
-            <span className="text-foreground font-semibold">Entrepreneur</span> • 
-            <span className="text-foreground font-semibold"> Developer</span> • 
-            <span className="text-foreground font-semibold"> Esports Founder</span>
-          </motion.p>
+            <span className="text-lg md:text-xl text-foreground font-semibold">
+              {currentText}
+            </span>
+            <motion.span
+              className="inline-block w-0.5 h-6 md:h-7 bg-primary ml-1 align-middle"
+              animate={{ opacity: [1, 0] }}
+              transition={{ duration: 0.5, repeat: Infinity, repeatType: "reverse" }}
+            />
+          </motion.div>
 
           <motion.div 
             className="flex flex-col sm:flex-row gap-4 justify-center md:justify-start"
@@ -154,7 +168,7 @@ const HeroSection = () => {
 
       {/* Scroll indicator */}
       <motion.div 
-        className="absolute bottom-8 left-1/2 -translate-x-1/2"
+        className="absolute bottom-8 left-1/2 -translate-x-1/2 z-10"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1, y: [0, 10, 0] }}
         transition={{ opacity: { delay: 1.5 }, y: { duration: 2, repeat: Infinity } }}
