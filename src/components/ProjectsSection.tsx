@@ -2,6 +2,8 @@ import { motion } from "framer-motion";
 import { useInView } from "framer-motion";
 import { useRef, useState } from "react";
 import { ExternalLink, X, Play, Bot, Gamepad2, Cpu, UtensilsCrossed, Home, Building } from "lucide-react";
+import { useTilt } from "@/hooks/useTilt";
+import { useSoundEffects } from "@/hooks/useSoundEffects";
 
 interface Project {
   id: number;
@@ -117,6 +119,61 @@ const projects: Project[] = [
   },
 ];
 
+const ProjectCard = ({ project, index, isInView, onClick }: { 
+  project: Project; 
+  index: number; 
+  isInView: boolean;
+  onClick: () => void;
+}) => {
+  const { tiltStyle, handleMouseMove, handleMouseLeave } = useTilt(10);
+  const { playHover } = useSoundEffects();
+
+  return (
+    <motion.div
+      className="flex-shrink-0 w-72 md:w-80 rounded-xl overflow-hidden card-glow cursor-pointer group"
+      style={{ 
+        background: "var(--gradient-card)", 
+        border: "1px solid hsl(var(--border))",
+        ...tiltStyle
+      }}
+      initial={{ opacity: 0, x: 50 }}
+      animate={isInView ? { opacity: 1, x: 0 } : {}}
+      transition={{ duration: 0.5, delay: index * 0.1 }}
+      onClick={onClick}
+      onMouseMove={handleMouseMove}
+      onMouseLeave={handleMouseLeave}
+      onMouseEnter={playHover}
+    >
+      {/* Card Header with Gradient */}
+      <div className={`h-40 bg-gradient-to-br ${project.color} flex items-center justify-center relative overflow-hidden`}>
+        <project.icon className="w-16 h-16 text-white/80" />
+        <div className="absolute inset-0 bg-black/20 group-hover:bg-black/10 transition-all duration-300" />
+        
+        {/* Play button overlay */}
+        <motion.div 
+          className="absolute inset-0 flex items-center justify-center bg-black/50 opacity-0 group-hover:opacity-100 transition-all duration-300"
+        >
+          <div className="w-14 h-14 rounded-full bg-white/90 flex items-center justify-center">
+            <Play className="w-6 h-6 text-black ml-1" fill="currentColor" />
+          </div>
+        </motion.div>
+      </div>
+
+      {/* Card Content */}
+      <div className="p-5">
+        <div className="flex items-center justify-between mb-2">
+          <span className="text-xs text-primary font-medium">{project.year}</span>
+          {project.link && (
+            <ExternalLink className="w-4 h-4 text-muted-foreground" />
+          )}
+        </div>
+        <h3 className="font-semibold text-lg text-foreground mb-1">{project.title}</h3>
+        <p className="text-sm text-muted-foreground">{project.subtitle}</p>
+      </div>
+    </motion.div>
+  );
+};
+
 const ProjectsSection = () => {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: "-100px" });
@@ -136,43 +193,13 @@ const ProjectsSection = () => {
       {/* Horizontal Scroll Row */}
       <div className="scroll-row mt-4">
         {projects.map((project, index) => (
-          <motion.div
+          <ProjectCard
             key={project.id}
-            className="flex-shrink-0 w-72 md:w-80 rounded-xl overflow-hidden card-glow cursor-pointer group"
-            style={{ background: "var(--gradient-card)", border: "1px solid hsl(var(--border))" }}
-            initial={{ opacity: 0, x: 50 }}
-            animate={isInView ? { opacity: 1, x: 0 } : {}}
-            transition={{ duration: 0.5, delay: index * 0.1 }}
+            project={project}
+            index={index}
+            isInView={isInView}
             onClick={() => setSelectedProject(project)}
-          >
-            {/* Card Header with Gradient */}
-            <div className={`h-40 bg-gradient-to-br ${project.color} flex items-center justify-center relative overflow-hidden`}>
-              <project.icon className="w-16 h-16 text-white/80" />
-              <div className="absolute inset-0 bg-black/20 group-hover:bg-black/10 transition-all duration-300" />
-              
-              {/* Play button overlay */}
-              <motion.div 
-                className="absolute inset-0 flex items-center justify-center bg-black/50 opacity-0 group-hover:opacity-100 transition-all duration-300"
-                whileHover={{ scale: 1.05 }}
-              >
-                <div className="w-14 h-14 rounded-full bg-white/90 flex items-center justify-center">
-                  <Play className="w-6 h-6 text-black ml-1" fill="currentColor" />
-                </div>
-              </motion.div>
-            </div>
-
-            {/* Card Content */}
-            <div className="p-5">
-              <div className="flex items-center justify-between mb-2">
-                <span className="text-xs text-primary font-medium">{project.year}</span>
-                {project.link && (
-                  <ExternalLink className="w-4 h-4 text-muted-foreground" />
-                )}
-              </div>
-              <h3 className="font-semibold text-lg text-foreground mb-1">{project.title}</h3>
-              <p className="text-sm text-muted-foreground">{project.subtitle}</p>
-            </div>
-          </motion.div>
+          />
         ))}
       </div>
 
