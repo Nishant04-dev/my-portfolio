@@ -15,6 +15,7 @@ import Footer from "@/components/Footer";
 import ClientLogosSection from "@/components/ClientLogosSection";
 import FAQSection from "@/components/FAQSection";
 import TimelineSection from "@/components/TimelineSection";
+import CertificatesSection from "@/components/CertificatesSection";
 import CustomCursor from "@/components/CustomCursor";
 import ScrollProgress from "@/components/ScrollProgress";
 import ThemeSoundToggle from "@/components/ThemeSoundToggle";
@@ -78,6 +79,7 @@ const IndexContent = () => {
               <ProjectsSection />
               <TimelineSection />
               <AchievementsSection />
+              <CertificatesSection />
               <WorkWithMeSection />
               <FAQSection />
               <TestimonialsSection />
