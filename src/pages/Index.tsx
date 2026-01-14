@@ -16,11 +16,13 @@ import ClientLogosSection from "@/components/ClientLogosSection";
 import FAQSection from "@/components/FAQSection";
 import TimelineSection from "@/components/TimelineSection";
 import CertificatesSection from "@/components/CertificatesSection";
+import BlogSection from "@/components/BlogSection";
 import CustomCursor from "@/components/CustomCursor";
 import ScrollProgress from "@/components/ScrollProgress";
 import ThemeSoundToggle from "@/components/ThemeSoundToggle";
 import KonamiEasterEgg from "@/components/KonamiEasterEgg";
 import KeyboardHints from "@/components/KeyboardHints";
+import TerminalEasterEgg from "@/components/TerminalEasterEgg";
 import { ThemeProvider } from "@/hooks/useTheme";
 import { SoundProvider } from "@/hooks/useSoundEffects";
 import { useKeyboardNavigation } from "@/hooks/useKeyboardNavigation";
@@ -57,6 +59,9 @@ const IndexContent = () => {
             {/* Konami Code Easter Egg */}
             <KonamiEasterEgg />
             
+            {/* Terminal Easter Egg */}
+            <TerminalEasterEgg />
+            
             {/* Keyboard Hints Modal */}
             <KeyboardHints 
               show={showHints} 
@@ -80,6 +85,7 @@ const IndexContent = () => {
               <TimelineSection />
               <AchievementsSection />
               <CertificatesSection />
+              <BlogSection />
               <WorkWithMeSection />
               <FAQSection />
               <TestimonialsSection />
