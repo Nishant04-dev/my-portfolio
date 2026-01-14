@@ -47,8 +47,8 @@ const ContactSection = () => {
     {
       icon: Mail,
       label: "Email",
-      value: "nishant@vanguard.ind.in",
-      href: "mailto:nishant@vanguard.ind.in",
+      value: "info@nishantchauhan.site",
+      href: "mailto:info@nishantchauhan.site",
     },
     {
       icon: Phone,
@@ -59,8 +59,8 @@ const ContactSection = () => {
     {
       icon: Globe,
       label: "Website",
-      value: "nishant.vanguard.ind.in",
-      href: "https://nishant.vanguard.ind.in",
+      value: "nishantchauhan.site",
+      href: "https://www.nishantchauhan.site/",
     },
   ];
 
