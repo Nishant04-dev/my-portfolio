@@ -9,6 +9,7 @@ import aiToolsCert from "@/assets/certificates/ai-tools-workshop.jpg";
 import pythonDataCert from "@/assets/certificates/python-data-analysis.jpg";
 import generativeAiCert from "@/assets/certificates/generative-ai.jpg";
 import uiuxCert from "@/assets/certificates/uiux-design.jpg";
+import advancedPythonCert from "@/assets/certificates/advanced-python.jpg";
 
 interface Certificate {
   id: number;
@@ -79,6 +80,16 @@ const certificates: Certificate[] = [
     image: aiToolsCert,
     pdfPath: "/certificates/ai-tools-workshop.pdf",
     category: "AI & ML"
+  },
+  {
+    id: 7,
+    title: "Advanced Python",
+    issuer: "Simplilearn",
+    date: "January 2026",
+    image: advancedPythonCert,
+    pdfPath: "/certificates/advanced-python.pdf",
+    category: "Programming",
+    code: "9714755"
   }
 ];
 
