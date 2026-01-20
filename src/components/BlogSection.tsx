@@ -1,102 +1,155 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { BookOpen, Clock, ArrowRight, Tag, Calendar, ExternalLink } from "lucide-react";
+import { BookOpen, Clock, ArrowRight, Tag, Calendar, ExternalLink, RefreshCw, Wifi, WifiOff } from "lucide-react";
 
-interface BlogPost {
-  id: number;
+interface WikiArticle {
+  id: string;
   title: string;
   excerpt: string;
-  content: string;
   category: string;
   readTime: string;
   date: string;
   tags: string[];
   image: string;
+  url: string;
   featured?: boolean;
 }
 
-const blogPosts: BlogPost[] = [
-  {
-    id: 1,
-    title: "Getting Started with React and TypeScript",
-    excerpt: "Learn how to set up a modern React project with TypeScript for type-safe development and better developer experience.",
-    content: "Full article content here...",
-    category: "Development",
-    readTime: "5 min read",
-    date: "Jan 10, 2026",
-    tags: ["React", "TypeScript", "Frontend"],
-    image: "https://images.unsplash.com/photo-1633356122544-f134324a6cee?w=800&auto=format&fit=crop&q=60",
-    featured: true,
-  },
-  {
-    id: 2,
-    title: "Mastering Tailwind CSS: Tips and Tricks",
-    excerpt: "Discover advanced techniques to streamline your styling workflow with Tailwind CSS utility classes.",
-    content: "Full article content here...",
-    category: "CSS",
-    readTime: "4 min read",
-    date: "Jan 8, 2026",
-    tags: ["Tailwind", "CSS", "Design"],
-    image: "https://images.unsplash.com/photo-1507721999472-8ed4421c4af2?w=800&auto=format&fit=crop&q=60",
-  },
-  {
-    id: 3,
-    title: "Building AI-Powered Applications",
-    excerpt: "Explore how to integrate AI capabilities into your web applications using modern APIs and frameworks.",
-    content: "Full article content here...",
-    category: "AI",
-    readTime: "7 min read",
-    date: "Jan 5, 2026",
-    tags: ["AI", "ChatGPT", "Machine Learning"],
-    image: "https://images.unsplash.com/photo-1677442136019-21780ecad995?w=800&auto=format&fit=crop&q=60",
-    featured: true,
-  },
-  {
-    id: 4,
-    title: "The Art of UI/UX Design",
-    excerpt: "Understanding the principles of great user interface and user experience design for modern applications.",
-    content: "Full article content here...",
-    category: "Design",
-    readTime: "6 min read",
-    date: "Jan 2, 2026",
-    tags: ["UI/UX", "Design", "Figma"],
-    image: "https://images.unsplash.com/photo-1561070791-2526d30994b5?w=800&auto=format&fit=crop&q=60",
-  },
-  {
-    id: 5,
-    title: "Python for Data Analysis: A Complete Guide",
-    excerpt: "Master data analysis techniques with Python using pandas, numpy, and visualization libraries.",
-    content: "Full article content here...",
-    category: "Data Science",
-    readTime: "8 min read",
-    date: "Dec 28, 2025",
-    tags: ["Python", "Data Analysis", "Pandas"],
-    image: "https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?w=800&auto=format&fit=crop&q=60",
-  },
-  {
-    id: 6,
-    title: "Deploying Modern Web Applications",
-    excerpt: "A comprehensive guide to deploying your web applications with CI/CD, Docker, and cloud platforms.",
-    content: "Full article content here...",
-    category: "DevOps",
-    readTime: "6 min read",
-    date: "Dec 25, 2025",
-    tags: ["DevOps", "Docker", "Cloud"],
-    image: "https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=800&auto=format&fit=crop&q=60",
-  },
-];
+const WIKI_TOPICS = {
+  "Programming": ["JavaScript", "Python_(programming_language)", "React_(JavaScript_library)", "TypeScript", "Artificial_intelligence", "Machine_learning"],
+  "Tech": ["Cloud_computing", "Blockchain", "Cybersecurity", "Internet_of_Things", "5G", "Quantum_computing"],
+  "Startup": ["Startup_company", "Venture_capital", "Y_Combinator", "Unicorn_(finance)", "Silicon_Valley", "Entrepreneurship"],
+  "AI": ["ChatGPT", "Large_language_model", "Neural_network", "Deep_learning", "Computer_vision", "Natural_language_processing"],
+  "Web Dev": ["Web_development", "HTML5", "CSS", "Node.js", "API", "Progressive_web_application"],
+  "Data Science": ["Data_science", "Big_data", "Data_analysis", "Statistics", "Data_visualization", "Apache_Spark"]
+};
 
-const categories = ["All", "Development", "CSS", "AI", "Design", "Data Science", "DevOps"];
+const categories = ["All", "Programming", "Tech", "Startup", "AI", "Web Dev", "Data Science"];
+
+const fetchWikipediaArticle = async (title: string, category: string): Promise<WikiArticle | null> => {
+  try {
+    const response = await fetch(
+      `https://en.wikipedia.org/api/rest_v1/page/summary/${encodeURIComponent(title)}`
+    );
+    
+    if (!response.ok) return null;
+    
+    const data = await response.json();
+    
+    // Calculate approximate read time based on extract length
+    const wordCount = data.extract?.split(' ').length || 0;
+    const readTime = Math.max(1, Math.ceil(wordCount / 200));
+    
+    // Generate tags from title
+    const tags = title.split('_').filter(t => t.length > 2 && t !== '(programming' && t !== 'language)').slice(0, 3);
+    
+    return {
+      id: data.pageid?.toString() || title,
+      title: data.title || title.replace(/_/g, ' '),
+      excerpt: data.extract || 'No description available',
+      category,
+      readTime: `${readTime} min read`,
+      date: new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }),
+      tags: tags.length > 0 ? tags : [category],
+      image: data.thumbnail?.source || data.originalimage?.source || `https://images.unsplash.com/photo-1633356122544-f134324a6cee?w=800&auto=format&fit=crop&q=60`,
+      url: data.content_urls?.desktop?.page || `https://en.wikipedia.org/wiki/${title}`,
+      featured: false
+    };
+  } catch (error) {
+    console.error(`Error fetching ${title}:`, error);
+    return null;
+  }
+};
 
 const BlogSection = () => {
   const [selectedCategory, setSelectedCategory] = useState("All");
-  const [hoveredId, setHoveredId] = useState<number | null>(null);
+  const [hoveredId, setHoveredId] = useState<string | null>(null);
+  const [articles, setArticles] = useState<WikiArticle[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [lastUpdated, setLastUpdated] = useState<Date | null>(null);
+  const [isOnline, setIsOnline] = useState(navigator.onLine);
 
-  const filteredPosts = selectedCategory === "All"
-    ? blogPosts
-    : blogPosts.filter(post => post.category === selectedCategory);
+  const fetchArticles = async () => {
+    setIsLoading(true);
+    const allArticles: WikiArticle[] = [];
+    
+    // Fetch articles from each category
+    for (const [category, topics] of Object.entries(WIKI_TOPICS)) {
+      // Randomly select 2 topics from each category for variety
+      const shuffled = topics.sort(() => Math.random() - 0.5).slice(0, 2);
+      
+      const promises = shuffled.map(topic => fetchWikipediaArticle(topic, category));
+      const results = await Promise.all(promises);
+      
+      results.forEach(article => {
+        if (article) allArticles.push(article);
+      });
+    }
+    
+    // Mark some as featured
+    if (allArticles.length > 0) {
+      const featuredIndices = [0, Math.min(2, allArticles.length - 1)];
+      featuredIndices.forEach(i => {
+        if (allArticles[i]) allArticles[i].featured = true;
+      });
+    }
+    
+    setArticles(allArticles);
+    setLastUpdated(new Date());
+    setIsLoading(false);
+    
+    // Cache in localStorage
+    localStorage.setItem('wikiArticles', JSON.stringify(allArticles));
+    localStorage.setItem('wikiLastUpdated', new Date().toISOString());
+  };
 
-  const featuredPosts = blogPosts.filter(post => post.featured);
+  useEffect(() => {
+    // Check online status
+    const handleOnline = () => setIsOnline(true);
+    const handleOffline = () => setIsOnline(false);
+    window.addEventListener('online', handleOnline);
+    window.addEventListener('offline', handleOffline);
+
+    // Load cached articles first
+    const cached = localStorage.getItem('wikiArticles');
+    const cachedDate = localStorage.getItem('wikiLastUpdated');
+    
+    if (cached) {
+      setArticles(JSON.parse(cached));
+      setLastUpdated(cachedDate ? new Date(cachedDate) : null);
+      setIsLoading(false);
+    }
+    
+    // Check if we need to refresh (daily update)
+    const shouldRefresh = () => {
+      if (!cachedDate) return true;
+      const lastUpdate = new Date(cachedDate);
+      const now = new Date();
+      // Refresh if more than 24 hours old
+      return (now.getTime() - lastUpdate.getTime()) > 24 * 60 * 60 * 1000;
+    };
+    
+    if (shouldRefresh() && isOnline) {
+      fetchArticles();
+    } else if (!cached) {
+      fetchArticles();
+    }
+
+    return () => {
+      window.removeEventListener('online', handleOnline);
+      window.removeEventListener('offline', handleOffline);
+    };
+  }, []);
+
+  const filteredArticles = selectedCategory === "All"
+    ? articles
+    : articles.filter(article => article.category === selectedCategory);
+
+  const featuredArticles = articles.filter(article => article.featured);
+
+  const handleReadMore = (url: string) => {
+    window.open(url, '_blank', 'noopener,noreferrer');
+  };
 
   return (
     <section id="blog" className="py-24 relative overflow-hidden">
@@ -122,16 +175,44 @@ const BlogSection = () => {
             className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 border border-primary/20 mb-6"
           >
             <BookOpen className="w-4 h-4 text-primary" />
-            <span className="text-sm text-primary font-medium">Blog & Articles</span>
+            <span className="text-sm text-primary font-medium">Live from Wikipedia</span>
           </motion.div>
 
           <h2 className="text-4xl md:text-5xl font-bold mb-4">
-            <span className="text-foreground">Latest </span>
+            <span className="text-foreground">Tech </span>
             <span className="text-primary">Insights</span>
           </h2>
           <p className="text-muted-foreground max-w-2xl mx-auto text-lg">
-            Sharing knowledge, tutorials, and thoughts on web development, design, and technology
+            Real-time articles about technology, programming, startups, and more
           </p>
+
+          {/* Status Bar */}
+          <div className="flex items-center justify-center gap-4 mt-4 text-sm text-muted-foreground">
+          <span className="flex items-center gap-1">
+            {isOnline ? (
+              <Wifi className="w-4 h-4 text-primary" />
+            ) : (
+              <WifiOff className="w-4 h-4 text-destructive" />
+            )}
+            {isOnline ? 'Online' : 'Offline'}
+            </span>
+            {lastUpdated && (
+              <span className="flex items-center gap-1">
+                <Clock className="w-4 h-4" />
+                Updated: {lastUpdated.toLocaleDateString()}
+              </span>
+            )}
+            <motion.button
+              onClick={fetchArticles}
+              disabled={isLoading || !isOnline}
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              className="flex items-center gap-1 px-3 py-1 rounded-full bg-primary/10 hover:bg-primary/20 text-primary disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+            >
+              <RefreshCw className={`w-4 h-4 ${isLoading ? 'animate-spin' : ''}`} />
+              Refresh
+            </motion.button>
+          </div>
         </motion.div>
 
         {/* Category Filter */}
@@ -159,8 +240,18 @@ const BlogSection = () => {
           ))}
         </motion.div>
 
+        {/* Loading State */}
+        {isLoading && articles.length === 0 && (
+          <div className="flex items-center justify-center py-20">
+            <div className="text-center">
+              <RefreshCw className="w-12 h-12 text-primary animate-spin mx-auto mb-4" />
+              <p className="text-muted-foreground">Loading articles from Wikipedia...</p>
+            </div>
+          </div>
+        )}
+
         {/* Featured Posts */}
-        {selectedCategory === "All" && (
+        {selectedCategory === "All" && featuredArticles.length > 0 && (
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -173,24 +264,28 @@ const BlogSection = () => {
               Featured Articles
             </h3>
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-              {featuredPosts.map((post, index) => (
+              {featuredArticles.map((article, index) => (
                 <motion.article
-                  key={post.id}
+                  key={article.id}
                   initial={{ opacity: 0, y: 20 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
                   transition={{ delay: index * 0.1 }}
-                  onMouseEnter={() => setHoveredId(post.id)}
+                  onMouseEnter={() => setHoveredId(article.id)}
                   onMouseLeave={() => setHoveredId(null)}
+                  onClick={() => handleReadMore(article.url)}
                   className="group relative overflow-hidden rounded-2xl bg-card border border-border/50 hover:border-primary/50 transition-all duration-500 cursor-pointer"
                 >
                   <div className="flex flex-col md:flex-row">
                     {/* Image */}
                     <div className="relative w-full md:w-2/5 aspect-video md:aspect-auto overflow-hidden">
                       <img
-                        src={post.image}
-                        alt={post.title}
+                        src={article.image}
+                        alt={article.title}
                         className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                        onError={(e) => {
+                          (e.target as HTMLImageElement).src = 'https://images.unsplash.com/photo-1633356122544-f134324a6cee?w=800&auto=format&fit=crop&q=60';
+                        }}
                       />
                       <div className="absolute inset-0 bg-gradient-to-r from-transparent to-card/80" />
                     </div>
@@ -199,32 +294,32 @@ const BlogSection = () => {
                     <div className="flex-1 p-6">
                       <div className="flex items-center gap-3 mb-3">
                         <span className="px-3 py-1 rounded-full bg-primary/10 text-primary text-xs font-medium">
-                          {post.category}
+                          {article.category}
                         </span>
                         <span className="text-xs text-muted-foreground flex items-center gap-1">
                           <Clock className="w-3 h-3" />
-                          {post.readTime}
+                          {article.readTime}
                         </span>
                       </div>
 
                       <h4 className="text-xl font-bold text-foreground mb-2 group-hover:text-primary transition-colors">
-                        {post.title}
+                        {article.title}
                       </h4>
                       <p className="text-muted-foreground text-sm mb-4 line-clamp-2">
-                        {post.excerpt}
+                        {article.excerpt}
                       </p>
 
                       <div className="flex items-center justify-between">
                         <span className="text-xs text-muted-foreground flex items-center gap-1">
                           <Calendar className="w-3 h-3" />
-                          {post.date}
+                          {article.date}
                         </span>
                         <motion.span
                           className="text-primary font-medium text-sm flex items-center gap-1"
-                          animate={{ x: hoveredId === post.id ? 5 : 0 }}
+                          animate={{ x: hoveredId === article.id ? 5 : 0 }}
                         >
-                          Read More
-                          <ArrowRight className="w-4 h-4" />
+                          Read on Wikipedia
+                          <ExternalLink className="w-4 h-4" />
                         </motion.span>
                       </div>
                     </div>
@@ -241,31 +336,35 @@ const BlogSection = () => {
           className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
         >
           <AnimatePresence mode="popLayout">
-            {filteredPosts.filter(p => selectedCategory !== "All" || !p.featured).map((post, index) => (
+            {filteredArticles.filter(a => selectedCategory !== "All" || !a.featured).map((article, index) => (
               <motion.article
-                key={post.id}
+                key={article.id}
                 layout
                 initial={{ opacity: 0, scale: 0.8 }}
                 animate={{ opacity: 1, scale: 1 }}
                 exit={{ opacity: 0, scale: 0.8 }}
                 transition={{ duration: 0.4, delay: index * 0.1 }}
-                onMouseEnter={() => setHoveredId(post.id)}
+                onMouseEnter={() => setHoveredId(article.id)}
                 onMouseLeave={() => setHoveredId(null)}
+                onClick={() => handleReadMore(article.url)}
                 className="group relative overflow-hidden rounded-2xl bg-card border border-border/50 hover:border-primary/50 transition-all duration-500 cursor-pointer"
               >
                 {/* Image */}
                 <div className="relative aspect-video overflow-hidden">
                   <img
-                    src={post.image}
-                    alt={post.title}
+                    src={article.image}
+                    alt={article.title}
                     className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                    onError={(e) => {
+                      (e.target as HTMLImageElement).src = 'https://images.unsplash.com/photo-1633356122544-f134324a6cee?w=800&auto=format&fit=crop&q=60';
+                    }}
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-card via-transparent to-transparent" />
                   
                   {/* Category Badge */}
                   <div className="absolute top-4 left-4">
                     <span className="px-3 py-1 rounded-full bg-primary/90 text-primary-foreground text-xs font-medium backdrop-blur-sm">
-                      {post.category}
+                      {article.category}
                     </span>
                   </div>
 
@@ -273,13 +372,13 @@ const BlogSection = () => {
                   <motion.div
                     initial={false}
                     animate={{
-                      opacity: hoveredId === post.id ? 1 : 0,
+                      opacity: hoveredId === article.id ? 1 : 0,
                     }}
                     className="absolute inset-0 flex items-center justify-center bg-background/60 backdrop-blur-sm"
                   >
                     <div className="px-6 py-3 rounded-full bg-primary text-primary-foreground font-medium flex items-center gap-2">
                       <ExternalLink className="w-4 h-4" />
-                      Read Article
+                      Read on Wikipedia
                     </div>
                   </motion.div>
                 </div>
@@ -289,25 +388,25 @@ const BlogSection = () => {
                   <div className="flex items-center gap-3 mb-3 text-xs text-muted-foreground">
                     <span className="flex items-center gap-1">
                       <Calendar className="w-3 h-3" />
-                      {post.date}
+                      {article.date}
                     </span>
                     <span>•</span>
                     <span className="flex items-center gap-1">
                       <Clock className="w-3 h-3" />
-                      {post.readTime}
+                      {article.readTime}
                     </span>
                   </div>
 
                   <h4 className="text-lg font-bold text-foreground mb-2 line-clamp-2 group-hover:text-primary transition-colors">
-                    {post.title}
+                    {article.title}
                   </h4>
                   <p className="text-muted-foreground text-sm line-clamp-2 mb-4">
-                    {post.excerpt}
+                    {article.excerpt}
                   </p>
 
                   {/* Tags */}
                   <div className="flex flex-wrap gap-2">
-                    {post.tags.slice(0, 3).map((tag) => (
+                    {article.tags.slice(0, 3).map((tag) => (
                       <span
                         key={tag}
                         className="px-2 py-1 rounded-md bg-secondary/50 text-muted-foreground text-xs flex items-center gap-1"
@@ -326,7 +425,14 @@ const BlogSection = () => {
           </AnimatePresence>
         </motion.div>
 
-        {/* View All Button */}
+        {/* Empty State */}
+        {!isLoading && filteredArticles.length === 0 && (
+          <div className="text-center py-12">
+            <p className="text-muted-foreground">No articles found in this category.</p>
+          </div>
+        )}
+
+        {/* Wikipedia Attribution */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -334,14 +440,20 @@ const BlogSection = () => {
           transition={{ delay: 0.6 }}
           className="text-center mt-12"
         >
-          <motion.button
+          <p className="text-sm text-muted-foreground mb-4">
+            Content sourced from Wikipedia • Auto-updates daily
+          </p>
+          <motion.a
+            href="https://en.wikipedia.org"
+            target="_blank"
+            rel="noopener noreferrer"
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
             className="px-8 py-3 rounded-full bg-card border border-border hover:border-primary text-foreground font-medium transition-all duration-300 inline-flex items-center gap-2"
           >
-            View All Articles
+            Explore More on Wikipedia
             <ArrowRight className="w-4 h-4" />
-          </motion.button>
+          </motion.a>
         </motion.div>
       </div>
     </section>
