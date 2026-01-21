@@ -23,13 +23,23 @@ import ThemeSoundToggle from "@/components/ThemeSoundToggle";
 import KonamiEasterEgg from "@/components/KonamiEasterEgg";
 import KeyboardHints from "@/components/KeyboardHints";
 import TerminalEasterEgg from "@/components/TerminalEasterEgg";
+import GitHubActivity from "@/components/GitHubActivity";
+import LiveChatWidget from "@/components/LiveChatWidget";
+import NewsletterSection from "@/components/NewsletterSection";
+import MiniGame from "@/components/MiniGame";
+import MatrixRain from "@/components/MatrixRain";
+import ThreeDViewer from "@/components/ThreeDViewer";
+import LanguageSwitcher from "@/components/LanguageSwitcher";
 import { ThemeProvider } from "@/hooks/useTheme";
 import { SoundProvider } from "@/hooks/useSoundEffects";
+import { LanguageProvider } from "@/hooks/useLanguage";
 import { useKeyboardNavigation } from "@/hooks/useKeyboardNavigation";
+import { useMatrixCode } from "@/hooks/useMatrixCode";
 
 const IndexContent = () => {
   const [isLoading, setIsLoading] = useState(true);
   const { showHints, setShowHints, sections } = useKeyboardNavigation();
+  const { isMatrixActive, deactivateMatrix } = useMatrixCode();
 
   return (
     <>
@@ -56,11 +66,23 @@ const IndexContent = () => {
             {/* Theme & Sound Toggle */}
             <ThemeSoundToggle />
             
+            {/* Language Switcher */}
+            <LanguageSwitcher />
+            
             {/* Konami Code Easter Egg */}
             <KonamiEasterEgg />
             
             {/* Terminal Easter Egg */}
             <TerminalEasterEgg />
+            
+            {/* Matrix Rain Easter Egg */}
+            <MatrixRain isActive={isMatrixActive} onDeactivate={deactivateMatrix} />
+            
+            {/* Mini Game */}
+            <MiniGame />
+            
+            {/* Live Chat Widget */}
+            <LiveChatWidget />
             
             {/* Keyboard Hints Modal */}
             <KeyboardHints 
@@ -82,13 +104,16 @@ const IndexContent = () => {
               <ClientLogosSection />
               <SkillsSection />
               <ProjectsSection />
+              <GitHubActivity />
               <TimelineSection />
               <AchievementsSection />
               <CertificatesSection />
+              <ThreeDViewer />
               <BlogSection />
               <WorkWithMeSection />
               <FAQSection />
               <TestimonialsSection />
+              <NewsletterSection />
               <ResumeSection />
               <ContactSection />
             </main>
@@ -104,11 +129,13 @@ const IndexContent = () => {
 
 const Index = () => {
   return (
-    <ThemeProvider>
-      <SoundProvider>
-        <IndexContent />
-      </SoundProvider>
-    </ThemeProvider>
+    <LanguageProvider>
+      <ThemeProvider>
+        <SoundProvider>
+          <IndexContent />
+        </SoundProvider>
+      </ThemeProvider>
+    </LanguageProvider>
   );
 };
 
