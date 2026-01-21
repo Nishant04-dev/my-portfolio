@@ -7,7 +7,7 @@ const packages = [
     id: "discord",
     name: "Discord Bot",
     icon: Bot,
-    price: "1,999",
+    price: "₹1,999",
     period: " onwards",
     description: "Best for communities, startups, esports teams & brands",
     color: "from-indigo-500 to-purple-600",
