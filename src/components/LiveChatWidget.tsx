@@ -19,7 +19,7 @@ const quickReplies = [
 const botResponses: Record<string, string> = {
   "tell me about your services": "I offer Discord bot development, web development, and full-stack solutions. My Discord bots include custom commands, moderation, and AI features. Web projects range from portfolios to complex web apps!",
   "what's your pricing": "Discord bots start at ₹1,999, Web development from ₹12,999, and full-stack projects have custom pricing based on requirements. All packages include post-launch support!",
-  "how can i contact you": "You can reach me via email at nishant@example.com, on Discord at nishant#0001, or fill out the contact form on this website. I usually respond within 24 hours!",
+  "how can i contact you": "You can reach me via email at info@nishantchauhan.site, on Discord, or fill out the contact form on this website. I usually respond within 24 hours!",
   "show me your projects": "Check out the Projects section above! I've built Aurix (Discord bot platform), organized esports tournaments with Vanguard India, and developed websites for various businesses.",
   "default": "Thanks for your message! I'm currently away, but I'll get back to you soon. In the meantime, feel free to explore the website or contact me directly through the contact form!",
 };
@@ -109,22 +109,26 @@ const LiveChatWidget = () => {
 
   return (
     <>
-      {/* Chat Button */}
+      {/* Chat Button - positioned on right side */}
       <AnimatePresence>
         {!isOpen && (
           <motion.button
-            className="fixed bottom-6 right-6 z-50 w-14 h-14 rounded-full flex items-center justify-center shadow-lg"
+            className="fixed bottom-8 right-8 z-[60] w-14 h-14 rounded-full flex items-center justify-center shadow-lg backdrop-blur-sm"
             style={{ background: "var(--gradient-red)" }}
             onClick={() => setIsOpen(true)}
-            initial={{ scale: 0 }}
-            animate={{ scale: 1 }}
-            exit={{ scale: 0 }}
-            whileHover={{ scale: 1.1 }}
+            initial={{ scale: 0, rotate: -180 }}
+            animate={{ scale: 1, rotate: 0 }}
+            exit={{ scale: 0, rotate: 180 }}
+            whileHover={{ scale: 1.1, boxShadow: "0 0 30px hsl(357 83% 47% / 0.5)" }}
             whileTap={{ scale: 0.9 }}
           >
             <MessageCircle className="w-6 h-6 text-white" />
             {/* Notification Dot */}
-            <span className="absolute -top-1 -right-1 w-4 h-4 bg-green-500 rounded-full border-2 border-background animate-pulse" />
+            <motion.span 
+              className="absolute -top-1 -right-1 w-4 h-4 bg-green-500 rounded-full border-2 border-background"
+              animate={{ scale: [1, 1.2, 1] }}
+              transition={{ repeat: Infinity, duration: 2 }}
+            />
           </motion.button>
         )}
       </AnimatePresence>
@@ -133,8 +137,8 @@ const LiveChatWidget = () => {
       <AnimatePresence>
         {isOpen && (
           <motion.div
-            className={`fixed z-50 shadow-2xl rounded-2xl overflow-hidden ${
-              isMinimized ? "bottom-6 right-6 w-72" : "bottom-6 right-6 w-96 h-[500px]"
+            className={`fixed z-[200] shadow-2xl rounded-2xl overflow-hidden ${
+              isMinimized ? "bottom-8 right-8 w-72" : "bottom-8 right-8 w-96 h-[500px]"
             }`}
             style={{ 
               background: "hsl(var(--card))", 
@@ -146,60 +150,70 @@ const LiveChatWidget = () => {
             transition={{ type: "spring", damping: 25 }}
           >
             {/* Header */}
-            <div 
+            <motion.div 
               className="p-4 flex items-center justify-between"
               style={{ background: "var(--gradient-red)" }}
             >
               <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-full bg-white/20 flex items-center justify-center">
+                <motion.div 
+                  className="w-10 h-10 rounded-full bg-white/20 flex items-center justify-center"
+                  animate={{ rotate: [0, 10, -10, 0] }}
+                  transition={{ repeat: Infinity, duration: 3, repeatDelay: 2 }}
+                >
                   <Bot className="w-5 h-5 text-white" />
-                </div>
+                </motion.div>
                 <div>
                   <h3 className="font-semibold text-white">Chat with Nishant</h3>
                   <p className="text-xs text-white/70">Usually replies instantly</p>
                 </div>
               </div>
               <div className="flex gap-2">
-                <button
+                <motion.button
                   onClick={() => setIsMinimized(!isMinimized)}
                   className="w-8 h-8 rounded-full bg-white/20 flex items-center justify-center hover:bg-white/30 transition-colors"
+                  whileHover={{ scale: 1.1 }}
+                  whileTap={{ scale: 0.9 }}
                 >
                   <Minimize2 className="w-4 h-4 text-white" />
-                </button>
-                <button
+                </motion.button>
+                <motion.button
                   onClick={() => setIsOpen(false)}
                   className="w-8 h-8 rounded-full bg-white/20 flex items-center justify-center hover:bg-white/30 transition-colors"
+                  whileHover={{ scale: 1.1, rotate: 90 }}
+                  whileTap={{ scale: 0.9 }}
                 >
                   <X className="w-4 h-4 text-white" />
-                </button>
+                </motion.button>
               </div>
-            </div>
+            </motion.div>
 
             {!isMinimized && (
               <>
                 {/* Messages */}
                 <div className="flex-1 overflow-y-auto p-4 space-y-4" style={{ height: "320px" }}>
-                  {messages.map((message) => (
+                  {messages.map((message, index) => (
                     <motion.div
                       key={message.id}
                       className={`flex gap-2 ${message.sender === "user" ? "justify-end" : ""}`}
-                      initial={{ opacity: 0, y: 10 }}
-                      animate={{ opacity: 1, y: 0 }}
+                      initial={{ opacity: 0, y: 10, scale: 0.9 }}
+                      animate={{ opacity: 1, y: 0, scale: 1 }}
+                      transition={{ delay: index * 0.05 }}
                     >
                       {message.sender === "bot" && (
                         <div className="w-8 h-8 rounded-full bg-primary/20 flex items-center justify-center flex-shrink-0">
                           <Bot className="w-4 h-4 text-primary" />
                         </div>
                       )}
-                      <div
+                      <motion.div
                         className={`max-w-[75%] p-3 rounded-2xl text-sm ${
                           message.sender === "user"
                             ? "bg-primary text-white rounded-br-sm"
                             : "bg-muted text-foreground rounded-bl-sm"
                         }`}
+                        whileHover={{ scale: 1.02 }}
                       >
                         {message.text}
-                      </div>
+                      </motion.div>
                       {message.sender === "user" && (
                         <div className="w-8 h-8 rounded-full bg-secondary flex items-center justify-center flex-shrink-0">
                           <User className="w-4 h-4 text-foreground" />
@@ -219,9 +233,21 @@ const LiveChatWidget = () => {
                       </div>
                       <div className="bg-muted p-3 rounded-2xl rounded-bl-sm">
                         <div className="flex gap-1">
-                          <span className="w-2 h-2 rounded-full bg-muted-foreground animate-bounce" style={{ animationDelay: "0ms" }} />
-                          <span className="w-2 h-2 rounded-full bg-muted-foreground animate-bounce" style={{ animationDelay: "150ms" }} />
-                          <span className="w-2 h-2 rounded-full bg-muted-foreground animate-bounce" style={{ animationDelay: "300ms" }} />
+                          <motion.span 
+                            className="w-2 h-2 rounded-full bg-muted-foreground"
+                            animate={{ y: [0, -5, 0] }}
+                            transition={{ duration: 0.5, repeat: Infinity, delay: 0 }}
+                          />
+                          <motion.span 
+                            className="w-2 h-2 rounded-full bg-muted-foreground"
+                            animate={{ y: [0, -5, 0] }}
+                            transition={{ duration: 0.5, repeat: Infinity, delay: 0.15 }}
+                          />
+                          <motion.span 
+                            className="w-2 h-2 rounded-full bg-muted-foreground"
+                            animate={{ y: [0, -5, 0] }}
+                            transition={{ duration: 0.5, repeat: Infinity, delay: 0.3 }}
+                          />
                         </div>
                       </div>
                     </motion.div>
@@ -232,14 +258,19 @@ const LiveChatWidget = () => {
                 {/* Quick Replies */}
                 <div className="px-4 pb-2">
                   <div className="flex gap-2 overflow-x-auto pb-2">
-                    {quickReplies.map((reply) => (
-                      <button
+                    {quickReplies.map((reply, index) => (
+                      <motion.button
                         key={reply}
                         onClick={() => handleSend(reply)}
                         className="flex-shrink-0 px-3 py-1.5 text-xs rounded-full bg-muted hover:bg-primary hover:text-white transition-colors"
+                        initial={{ opacity: 0, x: -10 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        transition={{ delay: index * 0.1 }}
+                        whileHover={{ scale: 1.05 }}
+                        whileTap={{ scale: 0.95 }}
                       >
                         {reply}
-                      </button>
+                      </motion.button>
                     ))}
                   </div>
                 </div>
@@ -255,14 +286,16 @@ const LiveChatWidget = () => {
                       onKeyPress={handleKeyPress}
                       className="flex-1 px-4 py-2 rounded-full bg-muted text-foreground text-sm focus:outline-none focus:ring-2 focus:ring-primary/50"
                     />
-                    <button
+                    <motion.button
                       onClick={() => handleSend()}
                       disabled={!inputValue.trim()}
                       className="w-10 h-10 rounded-full flex items-center justify-center disabled:opacity-50 disabled:cursor-not-allowed transition-all"
                       style={{ background: "var(--gradient-red)" }}
+                      whileHover={{ scale: 1.1 }}
+                      whileTap={{ scale: 0.9 }}
                     >
                       <Send className="w-4 h-4 text-white" />
-                    </button>
+                    </motion.button>
                   </div>
                 </div>
               </>

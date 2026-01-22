@@ -1,9 +1,10 @@
 import { useRef } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
-import { Play, Mail } from "lucide-react";
+import { Play, Mail, Sparkles } from "lucide-react";
 import nishantImage from "@/assets/nishant.jpg";
 import { useSoundEffects } from "@/hooks/useSoundEffects";
 import { useTypingEffect } from "@/hooks/useTypingEffect";
+import { useLanguage } from "@/hooks/useLanguage";
 import ParticleBackground from "./ParticleBackground";
 
 const roles = ["Entrepreneur", "Developer", "Esports Founder", "Bot Creator", "Tech Enthusiast"];
@@ -22,6 +23,7 @@ const HeroSection = () => {
 
   const { playHover, playClick } = useSoundEffects();
   const { currentText } = useTypingEffect(roles, 100, 50, 2000);
+  const { t } = useLanguage();
 
   const scrollToProjects = () => {
     playClick();
@@ -67,12 +69,14 @@ const HeroSection = () => {
             transition={{ delay: 0.3 }}
           >
             <motion.span 
-              className="inline-block text-primary font-medium tracking-widest uppercase text-sm"
+              className="inline-flex items-center gap-2 text-primary font-medium tracking-widest uppercase text-sm"
               initial={{ y: 50 }}
               animate={{ y: 0 }}
               transition={{ duration: 0.6, delay: 0.4 }}
             >
-              Welcome to my portfolio
+              <Sparkles className="w-4 h-4 animate-pulse" />
+              {t("hero.greeting")}
+              <Sparkles className="w-4 h-4 animate-pulse" />
             </motion.span>
           </motion.div>
 
@@ -83,7 +87,13 @@ const HeroSection = () => {
               animate={{ y: 0 }}
               transition={{ duration: 0.8, delay: 0.5 }}
             >
-              <span className="gradient-text">NISHANT</span>
+              <motion.span 
+                className="gradient-text inline-block"
+                whileHover={{ scale: 1.05 }}
+                transition={{ type: "spring", stiffness: 300 }}
+              >
+                NISHANT
+              </motion.span>
             </motion.h1>
           </div>
           
@@ -94,7 +104,13 @@ const HeroSection = () => {
               animate={{ y: 0 }}
               transition={{ duration: 0.8, delay: 0.6 }}
             >
-              <span className="gradient-text-red text-glow">CHAUHAN</span>
+              <motion.span 
+                className="gradient-text-red text-glow inline-block"
+                whileHover={{ scale: 1.05 }}
+                transition={{ type: "spring", stiffness: 300 }}
+              >
+                CHAUHAN
+              </motion.span>
             </motion.h1>
           </div>
 
@@ -121,22 +137,26 @@ const HeroSection = () => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 1 }}
           >
-            <button 
+            <motion.button 
               onClick={scrollToProjects}
               onMouseEnter={playHover}
               className="btn-primary flex items-center justify-center gap-2 group"
+              whileHover={{ scale: 1.05, boxShadow: "0 0 30px hsl(357 83% 47% / 0.5)" }}
+              whileTap={{ scale: 0.95 }}
             >
               <Play className="w-5 h-5 group-hover:scale-110 transition-transform" fill="currentColor" />
-              View Projects
-            </button>
-            <button 
+              {t("hero.cta.projects")}
+            </motion.button>
+            <motion.button 
               onClick={scrollToContact}
               onMouseEnter={playHover}
               className="btn-secondary flex items-center justify-center gap-2"
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
             >
               <Mail className="w-5 h-5" />
-              Contact Me
-            </button>
+              {t("hero.cta.contact")}
+            </motion.button>
           </motion.div>
         </motion.div>
 
@@ -148,6 +168,18 @@ const HeroSection = () => {
           transition={{ duration: 0.8, delay: 0.4 }}
         >
           <div className="relative">
+            {/* Animated rings */}
+            <motion.div 
+              className="absolute -inset-8 rounded-full border-2 border-primary/20"
+              animate={{ rotate: 360 }}
+              transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
+            />
+            <motion.div 
+              className="absolute -inset-12 rounded-full border border-primary/10"
+              animate={{ rotate: -360 }}
+              transition={{ duration: 30, repeat: Infinity, ease: "linear" }}
+            />
+            
             <motion.div 
               className="absolute -inset-4 rounded-full opacity-50 blur-2xl"
               style={{ background: "linear-gradient(135deg, hsl(357 83% 47% / 0.4), transparent)" }}
@@ -157,10 +189,12 @@ const HeroSection = () => {
               }}
               transition={{ duration: 4, repeat: Infinity }}
             />
-            <img 
+            <motion.img 
               src={nishantImage} 
               alt="Nishant Chauhan"
               className="w-64 h-64 md:w-80 md:h-80 rounded-full object-cover border-4 border-primary/30 shadow-2xl relative z-10"
+              whileHover={{ scale: 1.05 }}
+              transition={{ type: "spring", stiffness: 300 }}
             />
           </div>
         </motion.div>

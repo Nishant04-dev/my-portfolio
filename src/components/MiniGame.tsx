@@ -130,11 +130,14 @@ const MiniGame = () => {
 
   return (
     <>
-      {/* Game Button */}
+      {/* Game Button - positioned above theme toggles */}
       <motion.button
-        className="fixed bottom-6 left-6 z-40 w-12 h-12 rounded-full flex items-center justify-center shadow-lg bg-card border border-border hover:border-primary transition-colors"
+        className="fixed bottom-32 left-8 z-[60] w-12 h-12 rounded-full flex items-center justify-center shadow-lg bg-card border border-border hover:border-primary transition-colors backdrop-blur-sm"
         onClick={() => setIsOpen(true)}
-        whileHover={{ scale: 1.1 }}
+        initial={{ opacity: 0, x: -20 }}
+        animate={{ opacity: 1, x: 0 }}
+        transition={{ delay: 1.7 }}
+        whileHover={{ scale: 1.15, boxShadow: "0 0 20px hsl(357 83% 47% / 0.3)" }}
         whileTap={{ scale: 0.9 }}
         title="Play Snake Game"
       >
@@ -145,7 +148,7 @@ const MiniGame = () => {
       <AnimatePresence>
         {isOpen && (
           <motion.div
-            className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm"
+            className="fixed inset-0 z-[200] flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
@@ -154,46 +157,69 @@ const MiniGame = () => {
             <motion.div
               className="rounded-2xl p-6 max-w-md w-full"
               style={{ background: "hsl(var(--card))", border: "1px solid hsl(var(--border))" }}
-              initial={{ scale: 0.9, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              exit={{ scale: 0.9, opacity: 0 }}
+              initial={{ scale: 0.9, opacity: 0, rotateX: -20 }}
+              animate={{ scale: 1, opacity: 1, rotateX: 0 }}
+              exit={{ scale: 0.9, opacity: 0, rotateX: 20 }}
+              transition={{ type: "spring", damping: 20 }}
               onClick={(e) => e.stopPropagation()}
             >
               {/* Header */}
               <div className="flex items-center justify-between mb-4">
-                <div className="flex items-center gap-2">
+                <motion.div 
+                  className="flex items-center gap-2"
+                  initial={{ x: -20, opacity: 0 }}
+                  animate={{ x: 0, opacity: 1 }}
+                  transition={{ delay: 0.1 }}
+                >
                   <Gamepad2 className="w-6 h-6 text-primary" />
                   <h3 className="font-display text-2xl">SNAKE GAME</h3>
-                </div>
-                <button
+                </motion.div>
+                <motion.button
                   onClick={() => setIsOpen(false)}
                   className="w-8 h-8 rounded-full bg-muted flex items-center justify-center hover:bg-destructive/20 transition-colors"
+                  whileHover={{ scale: 1.1, rotate: 90 }}
+                  whileTap={{ scale: 0.9 }}
                 >
                   <X className="w-4 h-4" />
-                </button>
+                </motion.button>
               </div>
 
               {/* Score */}
-              <div className="flex justify-between mb-4 text-sm">
+              <motion.div 
+                className="flex justify-between mb-4 text-sm"
+                initial={{ y: -10, opacity: 0 }}
+                animate={{ y: 0, opacity: 1 }}
+                transition={{ delay: 0.2 }}
+              >
                 <div className="flex items-center gap-2">
                   <span className="text-muted-foreground">Score:</span>
-                  <span className="font-bold text-primary">{score}</span>
+                  <motion.span 
+                    className="font-bold text-primary"
+                    key={score}
+                    initial={{ scale: 1.5 }}
+                    animate={{ scale: 1 }}
+                  >
+                    {score}
+                  </motion.span>
                 </div>
                 <div className="flex items-center gap-2">
                   <Trophy className="w-4 h-4 text-yellow-500" />
                   <span className="text-muted-foreground">Best:</span>
                   <span className="font-bold">{highScore}</span>
                 </div>
-              </div>
+              </motion.div>
 
               {/* Game Board */}
-              <div
+              <motion.div
                 className="relative mx-auto rounded-lg overflow-hidden mb-4"
                 style={{
                   width: GRID_SIZE * CELL_SIZE,
                   height: GRID_SIZE * CELL_SIZE,
                   background: "hsl(var(--muted))",
                 }}
+                initial={{ scale: 0.9, opacity: 0 }}
+                animate={{ scale: 1, opacity: 1 }}
+                transition={{ delay: 0.3 }}
               >
                 {/* Grid */}
                 {Array.from({ length: GRID_SIZE * GRID_SIZE }).map((_, i) => (
@@ -246,19 +272,31 @@ const MiniGame = () => {
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                   >
-                    <div className="text-center">
+                    <motion.div 
+                      className="text-center"
+                      initial={{ scale: 0 }}
+                      animate={{ scale: 1 }}
+                      transition={{ type: "spring", damping: 10 }}
+                    >
                       <p className="font-display text-2xl text-primary mb-2">GAME OVER</p>
                       <p className="text-sm text-muted-foreground">Score: {score}</p>
-                    </div>
+                    </motion.div>
                   </motion.div>
                 )}
-              </div>
+              </motion.div>
 
               {/* Controls */}
-              <div className="flex justify-center gap-3">
-                <button
+              <motion.div 
+                className="flex justify-center gap-3"
+                initial={{ y: 20, opacity: 0 }}
+                animate={{ y: 0, opacity: 1 }}
+                transition={{ delay: 0.4 }}
+              >
+                <motion.button
                   onClick={toggleGame}
                   className="btn-primary px-6 py-2 flex items-center gap-2"
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
                 >
                   {gameOver ? (
                     <>
@@ -276,20 +314,27 @@ const MiniGame = () => {
                       {score > 0 ? "Resume" : "Start"}
                     </>
                   )}
-                </button>
-                <button
+                </motion.button>
+                <motion.button
                   onClick={resetGame}
                   className="btn-secondary px-4 py-2"
                   title="Reset"
+                  whileHover={{ scale: 1.05, rotate: -180 }}
+                  whileTap={{ scale: 0.95 }}
                 >
                   <RotateCcw className="w-4 h-4" />
-                </button>
-              </div>
+                </motion.button>
+              </motion.div>
 
               {/* Instructions */}
-              <p className="text-center text-xs text-muted-foreground mt-4">
+              <motion.p 
+                className="text-center text-xs text-muted-foreground mt-4"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 0.5 }}
+              >
                 Use Arrow Keys or WASD to move
-              </p>
+              </motion.p>
             </motion.div>
           </motion.div>
         )}
