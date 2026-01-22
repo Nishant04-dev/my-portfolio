@@ -102,8 +102,8 @@ const Footer = () => {
                 </a>
               </li>
               <li>
-                <a href="https://nishant.vanguard.ind.in" target="_blank" rel="noopener noreferrer" className="hover:text-primary transition-colors">
-                  🌐 nishant.vanguard.ind.in
+                <a href="https://nishantchauhan.site" target="_blank" rel="noopener noreferrer" className="hover:text-primary transition-colors">
+                  🌐 nishantchauhan.site
                 </a>
               </li>
             </ul>
