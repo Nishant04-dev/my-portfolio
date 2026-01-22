@@ -17,22 +17,22 @@ const ThemeSoundToggle = () => {
   };
 
   return (
-    <div className="fixed bottom-8 left-8 flex flex-col gap-3 z-[100]">
+    <div className="fixed bottom-8 left-8 flex flex-col gap-3 z-[60]">
       {/* Theme Toggle */}
       <motion.button
         initial={{ opacity: 0, x: -20 }}
         animate={{ opacity: 1, x: 0 }}
         transition={{ delay: 1.5 }}
-        whileHover={{ scale: 1.1 }}
+        whileHover={{ scale: 1.15, boxShadow: "0 0 20px hsl(357 83% 47% / 0.3)" }}
         whileTap={{ scale: 0.9 }}
         onClick={handleThemeToggle}
-        className="w-12 h-12 bg-card border border-border rounded-full flex items-center justify-center shadow-lg hover:border-primary/50 transition-colors group"
+        className="w-12 h-12 bg-card border border-border rounded-full flex items-center justify-center shadow-lg hover:border-primary/50 transition-colors group backdrop-blur-sm"
         aria-label="Toggle theme"
       >
         <motion.div
           initial={false}
           animate={{ rotate: theme === "dark" ? 0 : 180 }}
-          transition={{ duration: 0.3 }}
+          transition={{ duration: 0.5, type: "spring" }}
         >
           {theme === "dark" ? (
             <Moon className="w-5 h-5 text-muted-foreground group-hover:text-primary transition-colors" />
@@ -47,17 +47,22 @@ const ThemeSoundToggle = () => {
         initial={{ opacity: 0, x: -20 }}
         animate={{ opacity: 1, x: 0 }}
         transition={{ delay: 1.6 }}
-        whileHover={{ scale: 1.1 }}
+        whileHover={{ scale: 1.15, boxShadow: "0 0 20px hsl(357 83% 47% / 0.3)" }}
         whileTap={{ scale: 0.9 }}
         onClick={handleSoundToggle}
-        className="w-12 h-12 bg-card border border-border rounded-full flex items-center justify-center shadow-lg hover:border-primary/50 transition-colors group"
+        className="w-12 h-12 bg-card border border-border rounded-full flex items-center justify-center shadow-lg hover:border-primary/50 transition-colors group backdrop-blur-sm"
         aria-label="Toggle sound"
       >
-        {isSoundEnabled ? (
-          <Volume2 className="w-5 h-5 text-primary" />
-        ) : (
-          <VolumeX className="w-5 h-5 text-muted-foreground group-hover:text-primary transition-colors" />
-        )}
+        <motion.div
+          animate={isSoundEnabled ? { scale: [1, 1.2, 1] } : {}}
+          transition={{ duration: 0.5 }}
+        >
+          {isSoundEnabled ? (
+            <Volume2 className="w-5 h-5 text-primary" />
+          ) : (
+            <VolumeX className="w-5 h-5 text-muted-foreground group-hover:text-primary transition-colors" />
+          )}
+        </motion.div>
       </motion.button>
     </div>
   );
