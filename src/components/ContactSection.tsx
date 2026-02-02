@@ -1,7 +1,8 @@
 import { motion, useInView } from "framer-motion";
-import { useRef, useState, FormEvent } from "react";
+import { useRef, useState, FormEvent, useEffect } from "react";
 import { Mail, Phone, MapPin, Globe, Send, CheckCircle, AlertCircle, Sparkles } from "lucide-react";
 import { useLanguage } from "@/hooks/useLanguage";
+import { useConfetti } from "@/components/ConfettiCelebration";
 
 const ContactSection = () => {
   const ref = useRef(null);
@@ -9,6 +10,7 @@ const ContactSection = () => {
   const [result, setResult] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const { t } = useLanguage();
+  const { fireFireworks, fireSideCannons } = useConfetti();
 
   const onSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -29,6 +31,9 @@ const ContactSection = () => {
       if (data.success) {
         setResult("success");
         (event.target as HTMLFormElement).reset();
+        // Fire confetti celebration!
+        fireSideCannons();
+        setTimeout(() => fireFireworks(), 500);
       } else {
         setResult("error");
       }

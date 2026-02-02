@@ -30,6 +30,8 @@ import MiniGame from "@/components/MiniGame";
 import MatrixRain from "@/components/MatrixRain";
 import ThreeDViewer from "@/components/ThreeDViewer";
 import LanguageSwitcher from "@/components/LanguageSwitcher";
+import CursorTrail from "@/components/CursorTrail";
+import LiveVisitorCounter from "@/components/LiveVisitorCounter";
 import { ThemeProvider } from "@/hooks/useTheme";
 import { SoundProvider } from "@/hooks/useSoundEffects";
 import { LanguageProvider } from "@/hooks/useLanguage";
@@ -59,6 +61,12 @@ const IndexContent = () => {
           >
             {/* Custom Cursor */}
             <CustomCursor />
+            
+            {/* Cursor Trail Effect */}
+            <CursorTrail />
+            
+            {/* Live Visitor Counter */}
+            <LiveVisitorCounter />
             
             {/* Scroll Progress */}
             <ScrollProgress />

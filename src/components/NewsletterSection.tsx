@@ -2,12 +2,14 @@ import { useState } from "react";
 import { motion, useInView } from "framer-motion";
 import { useRef } from "react";
 import { Mail, Sparkles, CheckCircle, Loader2 } from "lucide-react";
+import { useConfetti } from "@/components/ConfettiCelebration";
 
 const NewsletterSection = () => {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: "-100px" });
   const [email, setEmail] = useState("");
   const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
+  const { fireStars, fireSideCannons } = useConfetti();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -27,6 +29,10 @@ const NewsletterSection = () => {
     
     setStatus("success");
     setEmail("");
+    
+    // Fire confetti celebration!
+    fireStars();
+    setTimeout(() => fireSideCannons(), 300);
     
     // Reset status after 3 seconds
     setTimeout(() => setStatus("idle"), 3000);
