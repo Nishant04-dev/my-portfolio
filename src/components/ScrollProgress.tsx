@@ -54,7 +54,7 @@ const ScrollProgress = () => {
             whileHover={{ scale: 1.1 }}
             whileTap={{ scale: 0.9 }}
             onClick={scrollToTop}
-            className="fixed bottom-8 right-8 w-12 h-12 bg-primary text-primary-foreground rounded-full shadow-lg shadow-primary/30 flex items-center justify-center z-[100] hover:bg-primary/90 transition-colors"
+            className="fixed bottom-24 right-8 w-12 h-12 bg-primary text-primary-foreground rounded-full shadow-lg shadow-primary/30 flex items-center justify-center z-[100] hover:bg-primary/90 transition-colors"
             aria-label="Back to top"
           >
             <ArrowUp className="w-5 h-5" />
@@ -69,7 +69,7 @@ const ScrollProgress = () => {
             initial={{ opacity: 0, x: 20 }}
             animate={{ opacity: 1, x: 0 }}
             exit={{ opacity: 0, x: 20 }}
-            className="fixed bottom-8 right-24 text-sm text-muted-foreground font-mono z-[100]"
+            className="fixed bottom-[6.5rem] right-[5.5rem] text-sm text-muted-foreground font-mono z-[100]"
           >
             {Math.round(scrollProgress)}%
           </motion.div>
