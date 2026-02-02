@@ -84,12 +84,26 @@ const ResumeSection = () => {
               <X className="w-5 h-5 text-white" />
             </button>
 
-            {/* PDF Embed */}
-            <iframe
-              src="/Nishant_Chauhan_Resume.pdf"
+            {/* PDF Embed with fallback */}
+            <object
+              data="/Nishant_Chauhan_Resume.pdf"
+              type="application/pdf"
               className="w-full h-full"
-              title="Resume PDF Viewer"
-            />
+            >
+              <div className="flex flex-col items-center justify-center h-full gap-4 p-8">
+                <p className="text-muted-foreground text-center">
+                  Unable to display PDF. The file may not exist or your browser doesn't support inline PDF viewing.
+                </p>
+                <a 
+                  href="/Nishant_Chauhan_Resume.pdf"
+                  download="Nishant_Chauhan_Resume.pdf"
+                  className="btn-primary inline-flex items-center gap-2"
+                >
+                  <Download className="w-5 h-5" />
+                  Download Instead
+                </a>
+              </div>
+            </object>
           </motion.div>
         </motion.div>
       )}
