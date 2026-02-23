@@ -11,6 +11,9 @@ import WorkWithMeSection from "@/components/WorkWithMeSection";
 import TestimonialsSection from "@/components/TestimonialsSection";
 import ResumeSection from "@/components/ResumeSection";
 import ContactSection from "@/components/ContactSection";
+import StatsCounter from "@/components/StatsCounter";
+import BookingSection from "@/components/BookingSection";
+import BeforeAfterSection from "@/components/BeforeAfterSection";
 import Footer from "@/components/Footer";
 import ClientLogosSection from "@/components/ClientLogosSection";
 import FAQSection from "@/components/FAQSection";
@@ -109,9 +112,11 @@ const IndexContent = () => {
             <main>
               <HeroSection />
               <AboutSection />
+              <StatsCounter />
               <ClientLogosSection />
               <SkillsSection />
               <ProjectsSection />
+              <BeforeAfterSection />
               <GitHubActivity />
               <TimelineSection />
               <AchievementsSection />
@@ -119,6 +124,7 @@ const IndexContent = () => {
               <ThreeDViewer />
               <BlogSection />
               <WorkWithMeSection />
+              <BookingSection />
               <FAQSection />
               <TestimonialsSection />
               <NewsletterSection />
