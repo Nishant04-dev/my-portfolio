@@ -6,6 +6,7 @@ import { useSoundEffects } from "@/hooks/useSoundEffects";
 import { useTypingEffect } from "@/hooks/useTypingEffect";
 import { useLanguage } from "@/hooks/useLanguage";
 import ParticleBackground from "./ParticleBackground";
+import AvailabilityBadge from "./AvailabilityBadge";
 
 const roles = ["Entrepreneur", "Developer", "Esports Founder", "Bot Creator", "Tech Enthusiast"];
 
@@ -113,6 +114,9 @@ const HeroSection = () => {
               </motion.span>
             </motion.h1>
           </div>
+
+          {/* Availability Badge */}
+          <AvailabilityBadge />
 
           {/* Typing Animation */}
           <motion.div 

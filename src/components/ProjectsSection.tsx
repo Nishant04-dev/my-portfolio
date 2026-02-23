@@ -16,7 +16,11 @@ interface Project {
   color: string;
   link?: string;
   image?: string;
+  category: string;
+  tech: string[];
 }
+
+const categories = ["All", "Discord Bots", "Web Development", "Esports", "Robotics"];
 
 const projects: Project[] = [
   {
@@ -29,6 +33,8 @@ const projects: Project[] = [
     icon: Bot,
     color: "from-blue-600 to-purple-600",
     link: "https://aurixdevelopment.xyz/",
+    category: "Discord Bots",
+    tech: ["Discord.js", "Node.js", "MongoDB"],
   },
   {
     id: 2,
@@ -40,6 +46,8 @@ const projects: Project[] = [
     icon: Bot,
     color: "from-cyan-500 to-blue-600",
     link: "https://sonix.aurixdevelopment.xyz/",
+    category: "Discord Bots",
+    tech: ["Discord.js", "Node.js", "APIs"],
   },
   {
     id: 3,
@@ -51,6 +59,8 @@ const projects: Project[] = [
     icon: Bot,
     color: "from-purple-500 to-pink-500",
     link: "https://pro.aurixdevelopment.xyz/",
+    category: "Discord Bots",
+    tech: ["Discord.js", "TypeScript", "PostgreSQL"],
   },
   {
     id: 4,
@@ -62,6 +72,8 @@ const projects: Project[] = [
     icon: Gamepad2,
     color: "from-red-600 to-orange-500",
     link: "https://vanguard.ind.in/",
+    category: "Esports",
+    tech: ["React", "Community", "Events"],
   },
   {
     id: 5,
@@ -72,6 +84,8 @@ const projects: Project[] = [
     features: ["Computer vision", "Autonomous navigation", "Camera sensors", "Real-time detection"],
     icon: Cpu,
     color: "from-green-500 to-teal-500",
+    category: "Robotics",
+    tech: ["Python", "OpenCV", "Arduino"],
   },
   {
     id: 6,
@@ -83,6 +97,8 @@ const projects: Project[] = [
     icon: UtensilsCrossed,
     color: "from-orange-500 to-red-500",
     link: "https://desi-tandoor.vercel.app/",
+    category: "Web Development",
+    tech: ["React", "Tailwind", "Vercel"],
   },
   {
     id: 7,
@@ -94,6 +110,8 @@ const projects: Project[] = [
     icon: UtensilsCrossed,
     color: "from-yellow-500 to-orange-500",
     link: "https://punjabi-tadka.vercel.app/",
+    category: "Web Development",
+    tech: ["React", "CSS", "Vercel"],
   },
   {
     id: 8,
@@ -105,6 +123,8 @@ const projects: Project[] = [
     icon: Home,
     color: "from-amber-600 to-yellow-500",
     link: "https://elite-furnish-ten.vercel.app/",
+    category: "Web Development",
+    tech: ["React", "Tailwind", "E-commerce"],
   },
   {
     id: 9,
@@ -116,6 +136,8 @@ const projects: Project[] = [
     icon: Building,
     color: "from-slate-600 to-blue-600",
     link: "https://gurugram-dream-homes.vercel.app/",
+    category: "Web Development",
+    tech: ["React", "Maps API", "Vercel"],
   },
 ];
 
@@ -178,6 +200,11 @@ const ProjectsSection = () => {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: "-100px" });
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
+  const [activeCategory, setActiveCategory] = useState("All");
+
+  const filteredProjects = activeCategory === "All" 
+    ? projects 
+    : projects.filter((p) => p.category === activeCategory);
 
   return (
     <section id="projects" className="py-20 relative" ref={ref}>
@@ -190,9 +217,32 @@ const ProjectsSection = () => {
         WORK & PROJECTS
       </motion.h2>
 
+      {/* Category Filters */}
+      <motion.div
+        className="flex gap-2 overflow-x-auto px-4 md:px-12 lg:px-16 mb-4 pb-2"
+        initial={{ opacity: 0, y: 10 }}
+        animate={isInView ? { opacity: 1, y: 0 } : {}}
+        transition={{ duration: 0.4, delay: 0.2 }}
+      >
+        {categories.map((cat) => (
+          <button
+            key={cat}
+            onClick={() => setActiveCategory(cat)}
+            className={`px-4 py-1.5 rounded-full text-sm font-medium whitespace-nowrap transition-all duration-300 border ${
+              activeCategory === cat
+                ? "border-primary text-primary"
+                : "border-border text-muted-foreground hover:border-primary/50"
+            }`}
+            style={activeCategory === cat ? { background: "hsl(var(--primary) / 0.1)" } : { background: "var(--gradient-card)" }}
+          >
+            {cat}
+          </button>
+        ))}
+      </motion.div>
+
       {/* Horizontal Scroll Row */}
-      <div className="scroll-row mt-4">
-        {projects.map((project, index) => (
+      <div className="scroll-row mt-2">
+        {filteredProjects.map((project, index) => (
           <ProjectCard
             key={project.id}
             project={project}
@@ -252,7 +302,16 @@ const ProjectsSection = () => {
                 ))}
               </div>
 
-              {/* CTA */}
+              {/* Tech Stack */}
+              <div className="flex flex-wrap gap-2 mb-6">
+                {selectedProject.tech.map((t) => (
+                  <span key={t} className="px-3 py-1 rounded-md text-xs font-medium bg-primary/10 text-primary border border-primary/20">
+                    {t}
+                  </span>
+                ))}
+              </div>
+
+
               {selectedProject.link && (
                 <a 
                   href={selectedProject.link}
