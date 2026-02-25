@@ -19,7 +19,7 @@ const quickReplies = [
 const botResponses: Record<string, string> = {
   "tell me about your services": "I offer Discord bot development, web development, and full-stack solutions. My Discord bots include custom commands, moderation, and AI features. Web projects range from portfolios to complex web apps!",
   "what's your pricing": "Discord bots start at ₹1,999, Web development from ₹12,999, and full-stack projects have custom pricing based on requirements. All packages include post-launch support!",
-  "how can i contact you": "You can reach me via email at info@nishantchauhan.site, on Discord, or fill out the contact form on this website. I usually respond within 24 hours!",
+  "how can i contact you": "You can reach me via email at info@nishantdev.in, on Discord, or fill out the contact form on this website. I usually respond within 24 hours!",
   "show me your projects": "Check out the Projects section above! I've built Aurix (Discord bot platform), organized esports tournaments with Vanguard India, and developed websites for various businesses.",
   "default": "Thanks for your message! I'm currently away, but I'll get back to you soon. In the meantime, feel free to explore the website or contact me directly through the contact form!",
 };

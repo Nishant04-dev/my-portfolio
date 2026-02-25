@@ -60,8 +60,8 @@ const ContactSection = () => {
     {
       icon: Globe,
       label: "Website",
-      value: "nishantchauhan.site",
-      href: "https://www.nishantchauhan.site/",
+      value: "nishantdev.in",
+      href: "https://nishantdev.in/",
     },
   ];
 

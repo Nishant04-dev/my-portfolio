@@ -35,6 +35,7 @@ import ThreeDViewer from "@/components/ThreeDViewer";
 import LanguageSwitcher from "@/components/LanguageSwitcher";
 import CursorTrail from "@/components/CursorTrail";
 import SecretEasterEggs from "@/components/SecretEasterEggs";
+import ScrollReveal from "@/components/ScrollReveal";
 import { ThemeProvider } from "@/hooks/useTheme";
 import { SoundProvider } from "@/hooks/useSoundEffects";
 import { LanguageProvider } from "@/hooks/useLanguage";
@@ -111,25 +112,25 @@ const IndexContent = () => {
             {/* Main Content */}
             <main>
               <HeroSection />
-              <AboutSection />
-              <StatsCounter />
-              <ClientLogosSection />
-              <SkillsSection />
-              <ProjectsSection />
-              <BeforeAfterSection />
-              <GitHubActivity />
-              <TimelineSection />
-              <AchievementsSection />
-              <CertificatesSection />
-              <ThreeDViewer />
-              <BlogSection />
-              <WorkWithMeSection />
-              <BookingSection />
-              <FAQSection />
-              <TestimonialsSection />
-              <NewsletterSection />
-              <ResumeSection />
-              <ContactSection />
+              <ScrollReveal direction="up"><AboutSection /></ScrollReveal>
+              <ScrollReveal direction="scale" delay={0.1}><StatsCounter /></ScrollReveal>
+              <ScrollReveal direction="fade"><ClientLogosSection /></ScrollReveal>
+              <ScrollReveal direction="left" delay={0.1}><SkillsSection /></ScrollReveal>
+              <ScrollReveal direction="right"><ProjectsSection /></ScrollReveal>
+              <ScrollReveal direction="scale"><BeforeAfterSection /></ScrollReveal>
+              <ScrollReveal direction="up" delay={0.1}><GitHubActivity /></ScrollReveal>
+              <ScrollReveal direction="left"><TimelineSection /></ScrollReveal>
+              <ScrollReveal direction="scale" delay={0.1}><AchievementsSection /></ScrollReveal>
+              <ScrollReveal direction="right"><CertificatesSection /></ScrollReveal>
+              <ScrollReveal direction="up"><ThreeDViewer /></ScrollReveal>
+              <ScrollReveal direction="fade" delay={0.1}><BlogSection /></ScrollReveal>
+              <ScrollReveal direction="left"><WorkWithMeSection /></ScrollReveal>
+              <ScrollReveal direction="scale"><BookingSection /></ScrollReveal>
+              <ScrollReveal direction="up"><FAQSection /></ScrollReveal>
+              <ScrollReveal direction="right" delay={0.1}><TestimonialsSection /></ScrollReveal>
+              <ScrollReveal direction="scale"><NewsletterSection /></ScrollReveal>
+              <ScrollReveal direction="up"><ResumeSection /></ScrollReveal>
+              <ScrollReveal direction="up" delay={0.1}><ContactSection /></ScrollReveal>
             </main>
 
             {/* Footer */}
