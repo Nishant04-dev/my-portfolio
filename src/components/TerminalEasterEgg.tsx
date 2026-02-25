@@ -51,8 +51,8 @@ AI/ML     │ ChatGPT, Prompt Engineering
 Type 'contact' to work together!`,
 
   contact: `Get in Touch:
-📧 Email    : info@nishantchauhan.site
-🌐 Website  : nishantchauhan.site
+📧 Email    : info@nishantdev.in
+🌐 Website  : nishantdev.in
 📱 Phone    : Available on request
 
 Type 'social' for my social media links!`,
