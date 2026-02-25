@@ -1,6 +1,6 @@
 import { motion, useInView } from "framer-motion";
 import { useRef, useState, FormEvent, useEffect } from "react";
-import { Mail, Phone, MapPin, Globe, Send, CheckCircle, AlertCircle, Sparkles } from "lucide-react";
+import { Mail, MapPin, Globe, Send, CheckCircle, AlertCircle, Sparkles } from "lucide-react";
 import { useLanguage } from "@/hooks/useLanguage";
 import { useConfetti } from "@/components/ConfettiCelebration";
 
@@ -54,14 +54,8 @@ const ContactSection = () => {
     {
       icon: Mail,
       label: t("contact.email"),
-      value: "info@nishantchauhan.site",
-      href: "mailto:info@nishantchauhan.site",
-    },
-    {
-      icon: Phone,
-      label: "Phone",
-      value: "+91 8810501509",
-      href: "tel:+918810501509",
+      value: "info@nishantdev.in",
+      href: "mailto:info@nishantdev.in",
     },
     {
       icon: Globe,

@@ -6,7 +6,7 @@ const Footer = () => {
     { icon: Github, href: "https://github.com/Nishant04-dev", label: "GitHub" },
     { icon: Linkedin, href: "https://www.linkedin.com/in/nishant-chauhan-a71002367", label: "LinkedIn" },
     { icon: Instagram, href: "https://www.instagram.com/vg_nishantchauhan", label: "Instagram" },
-    { icon: Mail, href: "mailto:Info@nishantchauhan.site", label: "Email" },
+    { icon: Mail, href: "mailto:info@nishantdev.in", label: "Email" },
   ];
 
   const quickLinks = [
@@ -92,13 +92,8 @@ const Footer = () => {
             <ul className="space-y-2 text-muted-foreground text-sm">
               <li>📍 Gurugram, Haryana, India</li>
               <li>
-                <a href="mailto:Info@nishantchauhan.site" className="hover:text-primary transition-colors">
-                  📧 Info@nishantchauhan.site
-                </a>
-              </li>
-              <li>
-                <a href="tel:+918810501509" className="hover:text-primary transition-colors">
-                  📞 +91 8810501509
+                <a href="mailto:info@nishantdev.in" className="hover:text-primary transition-colors">
+                  📧 info@nishantdev.in
                 </a>
               </li>
               <li>
