@@ -18,7 +18,7 @@ import Footer from "@/components/Footer";
 import ClientLogosSection from "@/components/ClientLogosSection";
 import FAQSection from "@/components/FAQSection";
 import TimelineSection from "@/components/TimelineSection";
-import CertificatesSection from "@/components/CertificatesSection";
+
 import BlogSection from "@/components/BlogSection";
 import CustomCursor from "@/components/CustomCursor";
 import ScrollProgress from "@/components/ScrollProgress";
@@ -121,7 +121,7 @@ const IndexContent = () => {
               <ScrollReveal direction="up" delay={0.1}><GitHubActivity /></ScrollReveal>
               <ScrollReveal direction="left"><TimelineSection /></ScrollReveal>
               <ScrollReveal direction="scale" delay={0.1}><AchievementsSection /></ScrollReveal>
-              <ScrollReveal direction="right"><CertificatesSection /></ScrollReveal>
+              
               <ScrollReveal direction="up"><ThreeDViewer /></ScrollReveal>
               <ScrollReveal direction="fade" delay={0.1}><BlogSection /></ScrollReveal>
               <ScrollReveal direction="left"><WorkWithMeSection /></ScrollReveal>
