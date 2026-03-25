@@ -124,8 +124,8 @@ const AboutSection = () => {
                 style={{ background: "var(--gradient-card)", border: "1px solid hsl(var(--border))" }}
                 variants={itemVariants}
                 whileHover={{ 
-                  scale: 1.08,
-                  boxShadow: "0 0 30px hsl(357 83% 47% / 0.3)"
+                  scale: 1.05,
+                  boxShadow: "0 0 30px hsl(357 83% 40% / 0.2)"
                 }}
                 whileTap={{ scale: 0.95 }}
               >
@@ -136,11 +136,11 @@ const AboutSection = () => {
                 
                 <motion.div
                   animate={{ 
-                    rotate: [0, 10, -10, 0],
-                    scale: [1, 1.1, 1]
+                    rotate: [0, 5, -5, 0],
+                    scale: [1, 1.05, 1]
                   }}
                   transition={{ 
-                    duration: 3, 
+                    duration: 4, 
                     repeat: Infinity,
                     delay: index * 0.2
                   }}

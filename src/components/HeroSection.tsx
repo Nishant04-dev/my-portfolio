@@ -10,6 +10,20 @@ import AvailabilityBadge from "./AvailabilityBadge";
 
 const roles = ["Entrepreneur", "Developer", "Esports Founder", "Bot Creator", "Tech Enthusiast"];
 
+const TypingText = ({ roles }: { roles: string[] }) => {
+  const { currentText } = useTypingEffect(roles, 100, 50, 2000);
+  return (
+    <span className="text-xl md:text-2xl text-muted-foreground font-light tracking-tight">
+      I am a <span className="text-white font-medium">{currentText}</span>
+      <motion.span
+        className="inline-block w-[2px] h-6 bg-primary ml-2 align-middle"
+        animate={{ opacity: [1, 0] }}
+        transition={{ duration: 0.5, repeat: Infinity, repeatType: "reverse" }}
+      />
+    </span>
+  );
+};
+
 const HeroSection = () => {
   const ref = useRef(null);
   const { scrollYProgress } = useScroll({
@@ -17,13 +31,13 @@ const HeroSection = () => {
     offset: ["start start", "end start"],
   });
 
-  const y = useTransform(scrollYProgress, [0, 1], [0, 300]);
+  // Parallax values - disabled on mobile via conditional transform
+  const y = useTransform(scrollYProgress, [0, 1], [0, 200]);
   const opacity = useTransform(scrollYProgress, [0, 0.5], [1, 0]);
-  const scale = useTransform(scrollYProgress, [0, 0.5], [1, 1.1]);
-  const textY = useTransform(scrollYProgress, [0, 1], [0, 150]);
+  const scale = useTransform(scrollYProgress, [0, 0.5], [1, 1.05]);
+  const textY = useTransform(scrollYProgress, [0, 1], [0, 100]);
 
   const { playHover, playClick } = useSoundEffects();
-  const { currentText } = useTypingEffect(roles, 100, 50, 2000);
   const { t } = useLanguage();
 
   const scrollToProjects = () => {
@@ -37,168 +51,133 @@ const HeroSection = () => {
   };
 
   return (
-    <section ref={ref} className="relative min-h-screen flex items-center justify-center overflow-hidden">
+    <section ref={ref} className="relative min-h-screen flex items-center justify-center overflow-hidden bg-[#050505]">
       {/* Particle Background */}
       <ParticleBackground />
 
-      {/* Parallax Background */}
-      <motion.div className="absolute inset-0 z-[1]" style={{ y, scale }}>
+      {/* Parallax Background - optimized */}
+      <motion.div 
+        className="absolute inset-0 z-[1] hidden md:block will-change-transform" 
+        style={{ y, scale, opacity }}
+      >
         <div 
-          className="absolute inset-0 bg-cover bg-center bg-no-repeat opacity-40"
+          className="absolute inset-0 bg-cover bg-center bg-no-repeat opacity-20 grayscale transition-opacity duration-1000"
           style={{ backgroundImage: `url(${nishantImage})` }}
         />
         <div className="hero-gradient absolute inset-0" />
-        <div className="absolute inset-0 bg-gradient-to-r from-background via-transparent to-background" />
       </motion.div>
 
-      {/* Content with parallax */}
+      {/* Mobile Background (Static) */}
+      <div className="absolute inset-0 z-[1] md:hidden">
+        <div 
+          className="absolute inset-0 bg-cover bg-center bg-no-repeat opacity-20 grayscale"
+          style={{ backgroundImage: `url(${nishantImage})` }}
+        />
+        <div className="hero-gradient absolute inset-0" />
+      </div>
+
+      {/* Content */}
       <motion.div 
-        className="relative z-10 container mx-auto px-4 md:px-8 flex flex-col md:flex-row items-center justify-between gap-12"
-        style={{ y: textY, opacity }}
+        className="relative z-10 container mx-auto px-6 md:px-12 flex flex-col md:flex-row items-center justify-between gap-16 will-change-transform"
+        style={{ y: typeof window !== 'undefined' && window.innerWidth > 768 ? textY : 0 }}
       >
         {/* Text Content */}
         <motion.div 
           className="flex-1 text-center md:text-left"
-          initial={{ opacity: 0, x: -50 }}
+          initial={{ opacity: 0, x: -30 }}
           animate={{ opacity: 1, x: 0 }}
-          transition={{ duration: 0.8, delay: 0.2 }}
+          transition={{ duration: 0.8, ease: "easeOut" }}
         >
           <motion.div
-            className="overflow-hidden mb-4"
+            className="mb-6"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            transition={{ delay: 0.3 }}
+            transition={{ delay: 0.2 }}
           >
-            <motion.span 
-              className="inline-flex items-center gap-2 text-primary font-medium tracking-widest uppercase text-sm"
-              initial={{ y: 50 }}
-              animate={{ y: 0 }}
-              transition={{ duration: 0.6, delay: 0.4 }}
-            >
-              <Sparkles className="w-4 h-4 animate-pulse" />
+            <span className="inline-flex items-center gap-2 text-primary font-semibold tracking-widest uppercase text-xs border border-primary/30 px-3 py-1 rounded-full bg-primary/5">
+              <Sparkles className="w-3 h-3" />
               {t("hero.greeting")}
-              <Sparkles className="w-4 h-4 animate-pulse" />
-            </motion.span>
+            </span>
           </motion.div>
 
-          <div className="overflow-hidden">
+          <div className="space-y-1 mb-8">
             <motion.h1 
-              className="font-display text-5xl md:text-7xl lg:text-8xl tracking-wide mb-2"
-              initial={{ y: 100 }}
-              animate={{ y: 0 }}
-              transition={{ duration: 0.8, delay: 0.5 }}
+              className="font-display text-6xl md:text-8xl lg:text-9xl tracking-tighter leading-none"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 0.3 }}
             >
-              <motion.span 
-                className="gradient-text inline-block"
-                whileHover={{ scale: 1.05 }}
-                transition={{ type: "spring", stiffness: 300 }}
-              >
-                NISHANT
-              </motion.span>
+              <span className="text-white border-none">NISHANT</span>
             </motion.h1>
-          </div>
-          
-          <div className="overflow-hidden">
             <motion.h1 
-              className="font-display text-5xl md:text-7xl lg:text-8xl tracking-wide mb-6"
-              initial={{ y: 100 }}
-              animate={{ y: 0 }}
-              transition={{ duration: 0.8, delay: 0.6 }}
+              className="font-display text-6xl md:text-8xl lg:text-9xl tracking-tighter leading-none"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 0.4 }}
             >
-              <motion.span 
-                className="gradient-text-red text-glow inline-block"
-                whileHover={{ scale: 1.05 }}
-                transition={{ type: "spring", stiffness: 300 }}
-              >
-                CHAUHAN
-              </motion.span>
+              <span className="gradient-text-red border-none">CHAUHAN</span>
             </motion.h1>
           </div>
 
-          {/* Availability Badge */}
           <AvailabilityBadge />
 
-          {/* Typing Animation */}
+          {/* Typing Animation - Isolated */}
           <motion.div 
-            className="h-8 md:h-10 mb-8"
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.8 }}
+            className="h-10 mb-10 mt-6"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.5 }}
           >
-            <span className="text-lg md:text-xl text-foreground font-semibold">
-              {currentText}
-            </span>
-            <motion.span
-              className="inline-block w-0.5 h-6 md:h-7 bg-primary ml-1 align-middle"
-              animate={{ opacity: [1, 0] }}
-              transition={{ duration: 0.5, repeat: Infinity, repeatType: "reverse" }}
-            />
+            <TypingText roles={roles} />
           </motion.div>
 
           <motion.div 
-            className="flex flex-col sm:flex-row gap-4 justify-center md:justify-start"
+            className="flex flex-col sm:flex-row gap-5 justify-center md:justify-start"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 1 }}
+            transition={{ duration: 0.6, delay: 0.6 }}
           >
             <motion.button 
               onClick={scrollToProjects}
               onMouseEnter={playHover}
-              className="btn-primary flex items-center justify-center gap-2 group"
-              whileHover={{ scale: 1.05, boxShadow: "0 0 30px hsl(357 83% 47% / 0.5)" }}
-              whileTap={{ scale: 0.95 }}
+              className="btn-primary group !rounded-full px-8 py-4 shadow-xl shadow-primary/10"
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
             >
-              <Play className="w-5 h-5 group-hover:scale-110 transition-transform" fill="currentColor" />
-              {t("hero.cta.projects")}
+              <span className="flex items-center gap-3">
+                <Play className="w-4 h-4 fill-current" />
+                {t("hero.cta.projects")}
+              </span>
             </motion.button>
             <motion.button 
               onClick={scrollToContact}
               onMouseEnter={playHover}
-              className="btn-secondary flex items-center justify-center gap-2"
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
+              className="btn-secondary !rounded-full px-8 py-4 border-white/10 hover:border-primary/50"
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
             >
-              <Mail className="w-5 h-5" />
-              {t("hero.cta.contact")}
+              <span className="flex items-center gap-3">
+                <Mail className="w-4 h-4" />
+                {t("hero.cta.contact")}
+              </span>
             </motion.button>
           </motion.div>
         </motion.div>
 
-        {/* Profile Image with parallax */}
+        {/* Profile Image - Simplified Elegance */}
         <motion.div 
           className="flex-shrink-0"
-          initial={{ opacity: 0, scale: 0.8 }}
+          initial={{ opacity: 0, scale: 0.9 }}
           animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 0.8, delay: 0.4 }}
+          transition={{ duration: 1, delay: 0.2 }}
         >
-          <div className="relative">
-            {/* Animated rings */}
-            <motion.div 
-              className="absolute -inset-8 rounded-full border-2 border-primary/20"
-              animate={{ rotate: 360 }}
-              transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
-            />
-            <motion.div 
-              className="absolute -inset-12 rounded-full border border-primary/10"
-              animate={{ rotate: -360 }}
-              transition={{ duration: 30, repeat: Infinity, ease: "linear" }}
-            />
-            
-            <motion.div 
-              className="absolute -inset-4 rounded-full opacity-50 blur-2xl"
-              style={{ background: "linear-gradient(135deg, hsl(357 83% 47% / 0.4), transparent)" }}
-              animate={{ 
-                scale: [1, 1.1, 1],
-                opacity: [0.3, 0.5, 0.3]
-              }}
-              transition={{ duration: 4, repeat: Infinity }}
-            />
+          <div className="relative group">
+            <div className="absolute -inset-1 bg-gradient-to-r from-primary/30 to-transparent rounded-full blur-lg opacity-20 group-hover:opacity-30 transition-opacity" />
             <motion.img 
               src={nishantImage} 
               alt="Nishant Chauhan"
-              className="w-64 h-64 md:w-80 md:h-80 rounded-full object-cover border-4 border-primary/30 shadow-2xl relative z-10"
-              whileHover={{ scale: 1.05 }}
-              transition={{ type: "spring", stiffness: 300 }}
+              className="w-72 h-72 md:w-96 md:h-96 rounded-full object-cover border-2 border-white/5 grayscale hover:grayscale-0 transition-grayscale duration-700 relative z-10 shadow-2xl"
+              whileHover={{ scale: 1.02 }}
             />
           </div>
         </motion.div>
@@ -206,18 +185,12 @@ const HeroSection = () => {
 
       {/* Scroll indicator */}
       <motion.div 
-        className="absolute bottom-8 left-1/2 -translate-x-1/2 z-10"
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1, y: [0, 10, 0] }}
-        transition={{ opacity: { delay: 1.5 }, y: { duration: 2, repeat: Infinity } }}
+        className="absolute bottom-10 left-1/2 -translate-x-1/2 z-10"
         style={{ opacity }}
       >
-        <div className="w-6 h-10 rounded-full border-2 border-muted-foreground/50 flex justify-center">
-          <motion.div 
-            className="w-1.5 h-3 bg-primary rounded-full mt-2"
-            animate={{ y: [0, 12, 0] }}
-            transition={{ duration: 1.5, repeat: Infinity }}
-          />
+        <div className="flex flex-col items-center gap-2">
+          <span className="text-[10px] uppercase tracking-[0.3em] text-muted-foreground/60 font-semibold">Scroll</span>
+          <div className="w-[1px] h-12 bg-gradient-to-b from-primary to-transparent" />
         </div>
       </motion.div>
     </section>

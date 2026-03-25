@@ -15,6 +15,7 @@ const ParticleBackground = () => {
   const particlesRef = useRef<Particle[]>([]);
   const animationRef = useRef<number>();
   const mouseRef = useRef({ x: 0, y: 0 });
+  const isInView = useRef(true);
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -23,6 +24,15 @@ const ParticleBackground = () => {
     const ctx = canvas.getContext("2d");
     if (!ctx) return;
 
+    // Intersection Observer to pause animation
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        isInView.current = entry.isIntersecting;
+      },
+      { threshold: 0.1 }
+    );
+    observer.observe(canvas);
+
     const resizeCanvas = () => {
       canvas.width = window.innerWidth;
       canvas.height = window.innerHeight;
@@ -30,16 +40,16 @@ const ParticleBackground = () => {
 
     const createParticles = () => {
       const particles: Particle[] = [];
-      const particleCount = Math.min(80, Math.floor(window.innerWidth / 20));
+      const particleCount = 40; // Fixed low count for stability
 
       for (let i = 0; i < particleCount; i++) {
         particles.push({
           x: Math.random() * canvas.width,
           y: Math.random() * canvas.height,
-          vx: (Math.random() - 0.5) * 0.5,
-          vy: (Math.random() - 0.5) * 0.5,
+          vx: (Math.random() - 0.5) * 0.2,
+          vy: (Math.random() - 0.5) * 0.2,
           size: Math.random() * 2 + 1,
-          opacity: Math.random() * 0.5 + 0.2,
+          opacity: Math.random() * 0.4 + 0.1,
         });
       }
 
@@ -47,55 +57,43 @@ const ParticleBackground = () => {
     };
 
     const drawParticles = () => {
+      if (!isInView.current) {
+        animationRef.current = requestAnimationFrame(drawParticles);
+        return;
+      }
+
       ctx.clearRect(0, 0, canvas.width, canvas.height);
 
       const particles = particlesRef.current;
       const mouse = mouseRef.current;
 
-      // Draw connections
-      for (let i = 0; i < particles.length; i++) {
-        for (let j = i + 1; j < particles.length; j++) {
-          const dx = particles[i].x - particles[j].x;
-          const dy = particles[i].y - particles[j].y;
-          const distance = Math.sqrt(dx * dx + dy * dy);
-
-          if (distance < 150) {
-            ctx.beginPath();
-            ctx.strokeStyle = `hsla(357, 83%, 47%, ${0.15 * (1 - distance / 150)})`;
-            ctx.lineWidth = 0.5;
-            ctx.moveTo(particles[i].x, particles[i].y);
-            ctx.lineTo(particles[j].x, particles[j].y);
-            ctx.stroke();
-          }
-        }
-
-        // Mouse connection
-        const mouseDx = particles[i].x - mouse.x;
-        const mouseDy = particles[i].y - mouse.y;
-        const mouseDistance = Math.sqrt(mouseDx * mouseDx + mouseDy * mouseDy);
-
-        if (mouseDistance < 200) {
+      // Draw particles and update them in one pass
+      for (const particle of particles) {
+        // Simple Mouse Interaction (Push/Pull)
+        const dx = mouse.x - particle.x;
+        const dy = mouse.y - particle.y;
+        const dist = Math.sqrt(dx * dx + dy * dy);
+        
+        if (dist < 100) {
           ctx.beginPath();
-          ctx.strokeStyle = `hsla(357, 83%, 47%, ${0.3 * (1 - mouseDistance / 200)})`;
-          ctx.lineWidth = 1;
-          ctx.moveTo(particles[i].x, particles[i].y);
+          ctx.strokeStyle = `hsla(357, 83%, 40%, ${0.1 * (1 - dist / 100)})`;
+          ctx.lineWidth = 0.5;
+          ctx.moveTo(particle.x, particle.y);
           ctx.lineTo(mouse.x, mouse.y);
           ctx.stroke();
         }
-      }
 
-      // Draw particles
-      for (const particle of particles) {
+        // Draw particle
         ctx.beginPath();
         ctx.arc(particle.x, particle.y, particle.size, 0, Math.PI * 2);
-        ctx.fillStyle = `hsla(357, 83%, 47%, ${particle.opacity})`;
+        ctx.fillStyle = `hsla(357, 83%, 40%, ${particle.opacity})`;
         ctx.fill();
 
         // Update position
         particle.x += particle.vx;
         particle.y += particle.vy;
 
-        // Bounce off edges
+        // Bounce
         if (particle.x < 0 || particle.x > canvas.width) particle.vx *= -1;
         if (particle.y < 0 || particle.y > canvas.height) particle.vy *= -1;
       }
@@ -121,6 +119,7 @@ const ParticleBackground = () => {
       if (animationRef.current) {
         cancelAnimationFrame(animationRef.current);
       }
+      observer.disconnect();
       window.removeEventListener("resize", resizeCanvas);
       window.removeEventListener("mousemove", handleMouseMove);
     };

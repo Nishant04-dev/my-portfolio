@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, lazy, Suspense } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import LoadingScreen from "@/components/LoadingScreen";
 import Navbar from "@/components/Navbar";
@@ -10,37 +10,38 @@ import AchievementsSection from "@/components/AchievementsSection";
 import WorkWithMeSection from "@/components/WorkWithMeSection";
 import TestimonialsSection from "@/components/TestimonialsSection";
 import ResumeSection from "@/components/ResumeSection";
-import ContactSection from "@/components/ContactSection";
-import StatsCounter from "@/components/StatsCounter";
-import BookingSection from "@/components/BookingSection";
-import BeforeAfterSection from "@/components/BeforeAfterSection";
 import Footer from "@/components/Footer";
 import ClientLogosSection from "@/components/ClientLogosSection";
 import FAQSection from "@/components/FAQSection";
 import TimelineSection from "@/components/TimelineSection";
-
-import BlogSection from "@/components/BlogSection";
-import CustomCursor from "@/components/CustomCursor";
 import ScrollProgress from "@/components/ScrollProgress";
-import ThemeSoundToggle from "@/components/ThemeSoundToggle";
-import KonamiEasterEgg from "@/components/KonamiEasterEgg";
-import KeyboardHints from "@/components/KeyboardHints";
-import TerminalEasterEgg from "@/components/TerminalEasterEgg";
-import GitHubActivity from "@/components/GitHubActivity";
-import LiveChatWidget from "@/components/LiveChatWidget";
-import NewsletterSection from "@/components/NewsletterSection";
-import MiniGame from "@/components/MiniGame";
-import MatrixRain from "@/components/MatrixRain";
-import ThreeDViewer from "@/components/ThreeDViewer";
-import LanguageSwitcher from "@/components/LanguageSwitcher";
-import CursorTrail from "@/components/CursorTrail";
-import SecretEasterEggs from "@/components/SecretEasterEggs";
 import ScrollReveal from "@/components/ScrollReveal";
 import { ThemeProvider } from "@/hooks/useTheme";
 import { SoundProvider } from "@/hooks/useSoundEffects";
 import { LanguageProvider } from "@/hooks/useLanguage";
 import { useKeyboardNavigation } from "@/hooks/useKeyboardNavigation";
 import { useMatrixCode } from "@/hooks/useMatrixCode";
+
+// Lazy loaded heavy components
+const StatsCounter = lazy(() => import("@/components/StatsCounter"));
+const BookingSection = lazy(() => import("@/components/BookingSection"));
+const BeforeAfterSection = lazy(() => import("@/components/BeforeAfterSection"));
+const BlogSection = lazy(() => import("@/components/BlogSection"));
+const GitHubActivity = lazy(() => import("@/components/GitHubActivity"));
+const NewsletterSection = lazy(() => import("@/components/NewsletterSection"));
+const ContactSection = lazy(() => import("@/components/ContactSection"));
+const ThreeDViewer = lazy(() => import("@/components/ThreeDViewer"));
+const MiniGame = lazy(() => import("@/components/MiniGame"));
+const MatrixRain = lazy(() => import("@/components/MatrixRain"));
+const TerminalEasterEgg = lazy(() => import("@/components/TerminalEasterEgg"));
+const KonamiEasterEgg = lazy(() => import("@/components/KonamiEasterEgg"));
+const SecretEasterEggs = lazy(() => import("@/components/SecretEasterEggs"));
+const LiveChatWidget = lazy(() => import("@/components/LiveChatWidget"));
+const CustomCursor = lazy(() => import("@/components/CustomCursor"));
+const CursorTrail = lazy(() => import("@/components/CursorTrail"));
+const ThemeSoundToggle = lazy(() => import("@/components/ThemeSoundToggle"));
+const KeyboardHints = lazy(() => import("@/components/KeyboardHints"));
+const LanguageSwitcher = lazy(() => import("@/components/LanguageSwitcher"));
 
 const IndexContent = () => {
   const [isLoading, setIsLoading] = useState(true);
@@ -64,44 +65,37 @@ const IndexContent = () => {
             transition={{ duration: 0.8, delay: 0.2 }}
           >
             {/* Custom Cursor */}
-            <CustomCursor />
-            
-            {/* Cursor Trail Effect */}
-            <CursorTrail />
+            <Suspense fallback={null}>
+              <CustomCursor />
+              <CursorTrail />
+            </Suspense>
             
             {/* Scroll Progress */}
             <ScrollProgress />
             
             {/* Theme & Sound Toggle */}
-            <ThemeSoundToggle />
+            <Suspense fallback={null}>
+              <ThemeSoundToggle />
+              <LanguageSwitcher />
+            </Suspense>
             
-            {/* Language Switcher */}
-            <LanguageSwitcher />
+            {/* Easter Eggs & Widgets */}
+            <Suspense fallback={null}>
+              <KonamiEasterEgg />
+              <TerminalEasterEgg />
+              <MatrixRain isActive={isMatrixActive} onDeactivate={deactivateMatrix} />
+              <SecretEasterEggs />
+              <MiniGame />
+              <LiveChatWidget />
+            </Suspense>
             
-            {/* Konami Code Easter Egg */}
-            <KonamiEasterEgg />
-            
-            {/* Terminal Easter Egg */}
-            <TerminalEasterEgg />
-            
-            {/* Matrix Rain Easter Egg */}
-            <MatrixRain isActive={isMatrixActive} onDeactivate={deactivateMatrix} />
-            
-            {/* Secret Code Easter Eggs */}
-            <SecretEasterEggs />
-            
-            {/* Mini Game */}
-            <MiniGame />
-            
-            {/* Live Chat Widget */}
-            <LiveChatWidget />
-            
-            {/* Keyboard Hints Modal */}
-            <KeyboardHints 
-              show={showHints} 
-              onClose={() => setShowHints(false)} 
-              sections={sections}
-            />
+            <Suspense fallback={null}>
+              <KeyboardHints 
+                show={showHints} 
+                onClose={() => setShowHints(false)} 
+                sections={sections}
+              />
+            </Suspense>
             
             {/* Grain Overlay */}
             <div className="grain-overlay" />
@@ -113,24 +107,46 @@ const IndexContent = () => {
             <main>
               <HeroSection />
               <ScrollReveal direction="up"><AboutSection /></ScrollReveal>
-              <ScrollReveal direction="scale" delay={0.1}><StatsCounter /></ScrollReveal>
+              
+              <Suspense fallback={<div className="h-20" />}>
+                <ScrollReveal direction="scale" delay={0.1}><StatsCounter /></ScrollReveal>
+              </Suspense>
+              
               <ScrollReveal direction="fade"><ClientLogosSection /></ScrollReveal>
               <ScrollReveal direction="left" delay={0.1}><SkillsSection /></ScrollReveal>
               <ScrollReveal direction="right"><ProjectsSection /></ScrollReveal>
-              <ScrollReveal direction="scale"><BeforeAfterSection /></ScrollReveal>
-              <ScrollReveal direction="up" delay={0.1}><GitHubActivity /></ScrollReveal>
+              
+              <Suspense fallback={<div className="h-96" />}>
+                <ScrollReveal direction="scale"><BeforeAfterSection /></ScrollReveal>
+                <ScrollReveal direction="up" delay={0.1}><GitHubActivity /></ScrollReveal>
+              </Suspense>
+              
               <ScrollReveal direction="left"><TimelineSection /></ScrollReveal>
               <ScrollReveal direction="scale" delay={0.1}><AchievementsSection /></ScrollReveal>
               
-              <ScrollReveal direction="up"><ThreeDViewer /></ScrollReveal>
-              <ScrollReveal direction="fade" delay={0.1}><BlogSection /></ScrollReveal>
+              <Suspense fallback={<div className="h-96" />}>
+                <ScrollReveal direction="up"><ThreeDViewer /></ScrollReveal>
+                <ScrollReveal direction="fade" delay={0.1}><BlogSection /></ScrollReveal>
+              </Suspense>
+              
               <ScrollReveal direction="left"><WorkWithMeSection /></ScrollReveal>
-              <ScrollReveal direction="scale"><BookingSection /></ScrollReveal>
+              
+              <Suspense fallback={<div className="h-96" />}>
+                <ScrollReveal direction="scale"><BookingSection /></ScrollReveal>
+              </Suspense>
+              
               <ScrollReveal direction="up"><FAQSection /></ScrollReveal>
               <ScrollReveal direction="right" delay={0.1}><TestimonialsSection /></ScrollReveal>
-              <ScrollReveal direction="scale"><NewsletterSection /></ScrollReveal>
+              
+              <Suspense fallback={<div className="h-40" />}>
+                <ScrollReveal direction="scale"><NewsletterSection /></ScrollReveal>
+              </Suspense>
+              
               <ScrollReveal direction="up"><ResumeSection /></ScrollReveal>
-              <ScrollReveal direction="up" delay={0.1}><ContactSection /></ScrollReveal>
+              
+              <Suspense fallback={<div className="h-96" />}>
+                <ScrollReveal direction="up" delay={0.1}><ContactSection /></ScrollReveal>
+              </Suspense>
             </main>
 
             {/* Footer */}

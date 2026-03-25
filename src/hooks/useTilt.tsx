@@ -10,6 +10,9 @@ export const useTilt = (maxTilt = 15) => {
   const [tilt, setTilt] = useState<TiltState>({ rotateX: 0, rotateY: 0, scale: 1 });
 
   const handleMouseMove = useCallback((e: MouseEvent<HTMLElement>) => {
+    // Disable on mobile
+    if (typeof window !== 'undefined' && window.innerWidth < 768) return;
+
     const element = e.currentTarget;
     const rect = element.getBoundingClientRect();
     

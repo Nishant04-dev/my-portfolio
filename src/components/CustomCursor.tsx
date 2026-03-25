@@ -1,8 +1,14 @@
 import { useEffect, useState } from "react";
-import { motion } from "framer-motion";
+import { motion, useMotionValue, useSpring } from "framer-motion";
 
 const CustomCursor = () => {
-  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
+  const mouseX = useMotionValue(0);
+  const mouseY = useMotionValue(0);
+
+  const springConfig = { damping: 20, stiffness: 250, mass: 0.5 };
+  const springX = useSpring(mouseX, springConfig);
+  const springY = useSpring(mouseY, springConfig);
+
   const [isHovering, setIsHovering] = useState(false);
   const [isClicking, setIsClicking] = useState(false);
   const [isVisible, setIsVisible] = useState(false);
@@ -15,7 +21,8 @@ const CustomCursor = () => {
     setIsVisible(true);
 
     const handleMouseMove = (e: MouseEvent) => {
-      setMousePosition({ x: e.clientX, y: e.clientY });
+      mouseX.set(e.clientX);
+      mouseY.set(e.clientY);
     };
 
     const handleMouseDown = () => setIsClicking(true);
@@ -51,7 +58,7 @@ const CustomCursor = () => {
       document.removeEventListener("mouseover", handleMouseEnter);
       document.removeEventListener("mouseout", handleMouseLeave);
     };
-  }, []);
+  }, [mouseX, mouseY]);
 
   if (!isVisible) return null;
 
@@ -60,52 +67,25 @@ const CustomCursor = () => {
       {/* Main Cursor Dot */}
       <motion.div
         className="fixed top-0 left-0 w-3 h-3 bg-primary rounded-full pointer-events-none z-[9999] mix-blend-difference"
-        animate={{
-          x: mousePosition.x - 6,
-          y: mousePosition.y - 6,
+        style={{
+          x: springX,
+          y: springY,
+          translateX: -6,
+          translateY: -6,
           scale: isClicking ? 0.5 : 1,
-        }}
-        transition={{
-          type: "spring",
-          stiffness: 500,
-          damping: 28,
-          mass: 0.5,
         }}
       />
 
       {/* Outer Ring */}
       <motion.div
         className="fixed top-0 left-0 w-10 h-10 border-2 border-primary/50 rounded-full pointer-events-none z-[9998]"
-        animate={{
-          x: mousePosition.x - 20,
-          y: mousePosition.y - 20,
+        style={{
+          x: springX,
+          y: springY,
+          translateX: -20,
+          translateY: -20,
           scale: isHovering ? 1.5 : isClicking ? 0.8 : 1,
           opacity: isHovering ? 0.8 : 0.5,
-        }}
-        transition={{
-          type: "spring",
-          stiffness: 150,
-          damping: 15,
-          mass: 0.1,
-        }}
-      />
-
-      {/* Glow Effect */}
-      <motion.div
-        className="fixed top-0 left-0 w-32 h-32 rounded-full pointer-events-none z-[9997] opacity-20"
-        style={{
-          background: "radial-gradient(circle, hsl(var(--primary)) 0%, transparent 70%)",
-        }}
-        animate={{
-          x: mousePosition.x - 64,
-          y: mousePosition.y - 64,
-          scale: isHovering ? 1.2 : 1,
-        }}
-        transition={{
-          type: "spring",
-          stiffness: 100,
-          damping: 20,
-          mass: 0.2,
         }}
       />
 

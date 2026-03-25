@@ -10,7 +10,7 @@ const Navbar = () => {
 
   useEffect(() => {
     const handleScroll = () => {
-      setIsScrolled(window.scrollY > 50);
+      setIsScrolled(window.scrollY > 20);
     };
 
     window.addEventListener("scroll", handleScroll);
@@ -22,8 +22,6 @@ const Navbar = () => {
     { label: "Skills", href: "#skills" },
     { label: "Projects", href: "#projects" },
     { label: "Journey", href: "#journey" },
-    { label: "Services", href: "#services" },
-    { label: "FAQ", href: "#faq" },
     { label: "Contact", href: "#contact" },
   ];
 
@@ -32,68 +30,87 @@ const Navbar = () => {
     setIsMobileMenuOpen(false);
     const element = document.querySelector(href);
     if (element) {
-      element.scrollIntoView({ behavior: "smooth" });
+      const offset = 80;
+      const bodyRect = document.body.getBoundingClientRect().top;
+      const elementRect = element.getBoundingClientRect().top;
+      const elementPosition = elementRect - bodyRect;
+      const offsetPosition = elementPosition - offset;
+
+      window.scrollTo({
+        top: offsetPosition,
+        behavior: "smooth"
+      });
     }
   };
 
   return (
     <>
       <motion.nav
-        className={`fixed top-1 left-0 right-0 z-40 transition-all duration-300 ${
+        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
           isScrolled 
-            ? "bg-background/95 backdrop-blur-md border-b border-border" 
-            : "bg-transparent"
+            ? "py-3 bg-black/95 border-b border-white/5" 
+            : "py-6 bg-transparent"
         }`}
         initial={{ y: -100 }}
         animate={{ y: 0 }}
-        transition={{ duration: 0.5 }}
+        transition={{ duration: 0.8, ease: "easeOut" }}
       >
-        <div className="container mx-auto px-4 md:px-8">
-          <div className="flex items-center justify-between h-16 md:h-20">
-            {/* Logo */}
-            <a 
-              href="#"
-              className="font-display text-xl md:text-2xl tracking-wide hover:text-primary transition-colors"
-              onClick={(e) => {
-                e.preventDefault();
-                playClick();
-                window.scrollTo({ top: 0, behavior: "smooth" });
-              }}
-              onMouseEnter={playHover}
-            >
-              <span className="text-primary">N</span>ISHANT
-            </a>
-
-            {/* Desktop Navigation */}
-            <div className="hidden lg:flex items-center gap-8">
-              {navLinks.map((link) => (
-                <a
-                  key={link.label}
-                  href={link.href}
-                  onClick={(e) => {
-                    e.preventDefault();
-                    handleNavClick(link.href);
-                  }}
-                  onMouseEnter={playHover}
-                  className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors animated-underline"
-                >
-                  {link.label}
-                </a>
-              ))}
+        <div className="container mx-auto px-6 md:px-12 flex items-center justify-between">
+          {/* Logo */}
+          <a 
+            href="#"
+            className="flex items-center gap-2 group"
+            onClick={(e) => {
+              e.preventDefault();
+              playClick();
+              window.scrollTo({ top: 0, behavior: "smooth" });
+            }}
+            onMouseEnter={playHover}
+          >
+            <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center font-display text-white text-xl">
+              N
             </div>
+            <span className="font-sans font-bold tracking-tight text-white group-hover:text-primary transition-colors">
+              CHAUHAN
+            </span>
+          </a>
 
-            {/* Mobile Menu Button */}
-            <button
-              className="lg:hidden p-2 text-foreground"
-              onClick={() => {
-                playClick();
-                setIsMobileMenuOpen(!isMobileMenuOpen);
-              }}
-              aria-label="Toggle menu"
+          {/* Desktop Navigation */}
+          <div className="hidden lg:flex items-center gap-10">
+            {navLinks.map((link) => (
+              <a
+                key={link.label}
+                href={link.href}
+                onClick={(e) => {
+                  e.preventDefault();
+                  handleNavClick(link.href);
+                }}
+                onMouseEnter={playHover}
+                className="text-xs uppercase tracking-[0.2em] font-semibold text-muted-foreground hover:text-white transition-colors relative group"
+              >
+                {link.label}
+                <span className="absolute -bottom-1 left-0 w-0 h-[2px] bg-primary transition-all duration-300 group-hover:w-full" />
+              </a>
+            ))}
+            <button 
+              onClick={() => handleNavClick("#contact")}
+              className="bg-white text-black px-5 py-2 rounded-full text-xs font-bold uppercase tracking-widest hover:bg-primary hover:text-white transition-all duration-300 transform hover:scale-105"
             >
-              {isMobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+              Hire Me
             </button>
           </div>
+
+          {/* Mobile Menu Button */}
+          <button
+            className="lg:hidden p-2 text-white bg-white/5 rounded-full border border-white/10"
+            onClick={() => {
+              playClick();
+              setIsMobileMenuOpen(!isMobileMenuOpen);
+            }}
+            aria-label="Toggle menu"
+          >
+            {isMobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+          </button>
         </div>
       </motion.nav>
 
@@ -101,41 +118,47 @@ const Navbar = () => {
       <AnimatePresence>
         {isMobileMenuOpen && (
           <motion.div
-            className="fixed inset-0 z-30 lg:hidden"
+            className="fixed inset-0 z-40 lg:hidden"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
           >
             <div 
-              className="absolute inset-0 bg-black/50 backdrop-blur-sm"
+              className="absolute inset-0 bg-black/95 backdrop-blur-xl"
               onClick={() => setIsMobileMenuOpen(false)}
             />
             <motion.div
-              className="absolute top-16 left-0 right-0 bg-background border-b border-border"
-              initial={{ opacity: 0, y: -20 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -20 }}
+              className="absolute inset-0 flex flex-col items-center justify-center gap-8"
+              initial={{ scale: 0.9, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.9, opacity: 0 }}
+              transition={{ type: "spring", damping: 25, stiffness: 200 }}
             >
-              <div className="container mx-auto px-4 py-6">
-                <div className="flex flex-col gap-4">
-                  {navLinks.map((link, index) => (
-                    <motion.a
-                      key={link.label}
-                      href={link.href}
-                      onClick={(e) => {
-                        e.preventDefault();
-                        handleNavClick(link.href);
-                      }}
-                      className="text-lg font-medium text-muted-foreground hover:text-foreground transition-colors py-2"
-                      initial={{ opacity: 0, x: -20 }}
-                      animate={{ opacity: 1, x: 0 }}
-                      transition={{ delay: index * 0.05 }}
-                    >
-                      {link.label}
-                    </motion.a>
-                  ))}
-                </div>
-              </div>
+              {navLinks.map((link, index) => (
+                <motion.a
+                  key={link.label}
+                  href={link.href}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    handleNavClick(link.href);
+                  }}
+                  className="text-4xl font-display tracking-tight text-white hover:text-primary transition-colors"
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: index * 0.1 }}
+                >
+                  {link.label}
+                </motion.a>
+              ))}
+              <motion.button
+                onClick={() => handleNavClick("#contact")}
+                className="mt-4 bg-primary text-white px-10 py-4 rounded-full text-lg font-bold uppercase tracking-widest"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: navLinks.length * 0.1 }}
+              >
+                Let's Talk
+              </motion.button>
             </motion.div>
           </motion.div>
         )}
