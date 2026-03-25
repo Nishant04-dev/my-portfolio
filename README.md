@@ -56,4 +56,4 @@ Unlike traditional heavy portfolios, this showcase is built for speed:
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
 ---
-Built with ❤️ by [Antigravity AI](https://deepmind.google/technologies/gemini/)
+Built with ❤️ by [Nishant Chauhan](https://nishantdev.in/)
