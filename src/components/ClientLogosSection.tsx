@@ -2,14 +2,12 @@ import { useRef } from "react";
 import { motion, useInView } from "framer-motion";
 
 const clients = [
+  { name: "Luveza", logo: "LZ" },
+  { name: "Campus Clash", logo: "CC" },
+  { name: "Lumiere AI", logo: "LA" },
+  { name: "The Nen", logo: "TN" },
   { name: "Aurix", logo: "A" },
   { name: "Vanguard", logo: "V" },
-  { name: "Sonix", logo: "S" },
-  { name: "Elite Furnish", logo: "EF" },
-  { name: "Desi Tandoor", logo: "DT" },
-  { name: "Punjabi Tadka", logo: "PT" },
-  { name: "Dream Homes", logo: "DH" },
-  { name: "Pro Bot", logo: "PB" },
 ];
 
 const ClientLogosSection = () => {

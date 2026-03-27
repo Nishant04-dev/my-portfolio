@@ -20,18 +20,18 @@ interface BeforeAfterItem {
 
 const comparisons: BeforeAfterItem[] = [
   {
-    title: "Desi Tandoor — Restaurant Website",
+    title: "Luveza — Startup Networking Platform",
     before: {
       label: "Before",
-      description: "Outdated, text-heavy layout with no visual appeal",
+      description: "No dedicated space for founders to connect and collaborate",
       color: "from-gray-600 to-gray-800",
-      issues: ["No responsive design", "Slow loading", "Poor navigation", "No online presence"],
+      issues: ["Scattered across LinkedIn", "No co-founder matching", "No community tools", "No SaaS structure"],
     },
     after: {
       label: "After",
-      description: "Modern, vibrant website with seamless UX",
-      color: "from-orange-500 to-red-500",
-      improvements: ["Fully responsive", "Fast & optimized", "Intuitive navigation", "Online ordering ready"],
+      description: "Dedicated platform for startup founders to connect",
+      color: "from-rose-500 to-pink-600",
+      improvements: ["Founder matching", "Collaboration tools", "SaaS platform", "Growing community"],
     },
   },
   {
@@ -50,18 +50,18 @@ const comparisons: BeforeAfterItem[] = [
     },
   },
   {
-    title: "Elite Furnish — E-commerce",
+    title: "Lumiere AI — AI Platform",
     before: {
       label: "Before",
-      description: "Basic catalog with no engagement or filtering",
+      description: "Manual workflows with no AI-powered automation",
       color: "from-gray-600 to-gray-800",
-      issues: ["Static product list", "No categories", "Poor mobile UX", "No CTAs"],
+      issues: ["No code generation", "Manual research", "No image creation", "Slow workflows"],
     },
     after: {
       label: "After",
-      description: "Premium e-commerce experience with elegant UI",
-      color: "from-amber-600 to-yellow-500",
-      improvements: ["Dynamic catalog", "Category filters", "Mobile-first design", "Clear conversion paths"],
+      description: "Advanced AI platform with full automation suite",
+      color: "from-amber-400 to-orange-500",
+      improvements: ["Code generation", "Deep research", "Image creation", "LLM-powered"],
     },
   },
 ];

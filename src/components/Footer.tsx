@@ -18,9 +18,12 @@ const Footer = () => {
   ];
 
   const projects = [
+    { label: "Luveza", href: "https://luveza.bond/" },
+    { label: "Campus Clash", href: "https://campus.clash.aurixdevelopment.in/" },
+    { label: "Lumiere AI", href: "https://lumiereai.nishantdev.in/" },
+    { label: "The Nen Wallpapers", href: "https://bg.thenen.site/" },
     { label: "Aurix Development", href: "https://aurixdevelopment.xyz/" },
     { label: "Vanguard India", href: "https://vanguard.ind.in/" },
-    { label: "Sonix Bot", href: "https://sonix.aurixdevelopment.xyz/" },
   ];
 
   return (

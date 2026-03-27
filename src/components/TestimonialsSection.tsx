@@ -17,8 +17,8 @@ const testimonials = [
   },
   {
     name: "Amit Kumar",
-    role: "Restaurant Owner - Desi Tandoor",
-    content: "The website Nishant built for us increased our online orders by 40%. Professional work, delivered on time, and exceeded expectations!",
+    role: "Startup Founder - Luveza",
+    content: "Nishant built our platform with incredible attention to detail. The networking features work flawlessly and our user base has grown rapidly since launch.",
     rating: 5,
   },
   {

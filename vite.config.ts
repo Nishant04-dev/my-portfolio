@@ -15,7 +15,7 @@ export default defineConfig(({ mode }) => ({
     mode === "development" && componentTagger(),
     VitePWA({
       registerType: "autoUpdate",
-      includeAssets: ["favicon.ico", "robots.txt"],
+      includeAssets: ["robots.txt"],
       manifest: {
         name: "Nishant Chauhan - Portfolio",
         short_name: "NC Portfolio",
