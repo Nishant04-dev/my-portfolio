@@ -4,155 +4,133 @@ import { Rocket, Trophy, Users, Code, Gamepad2, Bot } from "lucide-react";
 
 const milestones = [
   {
-    year: "2024",
-    month: "January",
+    year: "2024", month: "JAN",
     title: "Vanguard India Founded",
-    description:
-      "Started my journey as an entrepreneur by founding Vanguard India, a competitive esports organization focused on BGMI tournaments.",
-    icon: Gamepad2,
-    color: "from-purple-500 to-pink-500",
-    achievements: ["Organization Launch", "First Tournament"],
+    description: "Started my journey as an entrepreneur by founding Vanguard India, a competitive esports organization focused on BGMI tournaments.",
+    icon: Gamepad2, color: "#ff00ff",
+    tags: ["Organization Launch", "First Tournament"],
   },
   {
-    year: "2024",
-    month: "March",
+    year: "2024", month: "MAR",
     title: "First Offline LAN Event",
-    description:
-      "Successfully organized and hosted our first offline LAN esports event, bringing together gamers from across the region.",
-    icon: Trophy,
-    color: "from-yellow-500 to-orange-500",
-    achievements: ["LAN Event", "100+ Participants"],
+    description: "Successfully organized and hosted our first offline LAN esports event, bringing together gamers from across the region.",
+    icon: Trophy, color: "#ffcc00",
+    tags: ["LAN Event", "100+ Participants"],
   },
   {
-    year: "2024",
-    month: "June",
+    year: "2024", month: "JUN",
     title: "10,000 Community Members",
-    description:
-      "Vanguard India community grew to over 10,000 members, establishing a strong presence in the Indian esports scene.",
-    icon: Users,
-    color: "from-green-500 to-emerald-500",
-    achievements: ["10K+ Members", "Sponsorships"],
+    description: "Vanguard India community grew to over 10,000 members, establishing a strong presence in the Indian esports scene.",
+    icon: Users, color: "#00ff88",
+    tags: ["10K+ Members", "Sponsorships"],
   },
   {
-    year: "2024",
-    month: "September",
+    year: "2024", month: "SEP",
     title: "Web Development Journey",
-    description:
-      "Expanded skills into web development, creating professional websites for businesses and personal brands.",
-    icon: Code,
-    color: "from-blue-500 to-cyan-500",
-    achievements: ["First Client", "Portfolio Launch"],
+    description: "Expanded skills into web development, creating professional websites for businesses and personal brands.",
+    icon: Code, color: "#00d4ff",
+    tags: ["First Client", "Portfolio Launch"],
   },
   {
-    year: "2025",
-    month: "January",
+    year: "2025", month: "JAN",
     title: "Aurix Development Launch",
-    description:
-      "Founded Aurix Development, offering intelligent Discord bot solutions with AI-enhanced features for premium community management.",
-    icon: Bot,
-    color: "from-primary to-red-700",
-    achievements: ["20+ Bot Clients", "Premium Features"],
+    description: "Founded Aurix Development, offering intelligent Discord bot solutions with AI-enhanced features for premium community management.",
+    icon: Bot, color: "#00ff88",
+    tags: ["20+ Bot Clients", "Premium Features"],
   },
   {
-    year: "2025",
-    month: "Present",
+    year: "2025", month: "NOW",
     title: "Scaling New Heights",
-    description:
-      "Continuing to grow both ventures while exploring robotics, AI/ML, and full-stack development opportunities.",
-    icon: Rocket,
-    color: "from-indigo-500 to-purple-600",
-    achievements: ["1.5L+ Users Reached", "Multiple Ventures"],
+    description: "Continuing to grow both ventures while exploring robotics, AI/ML, and full-stack development opportunities.",
+    icon: Rocket, color: "#ff3366",
+    tags: ["1.5L+ Users Reached", "Multiple Ventures"],
   },
 ];
 
 const TimelineSection = () => {
-  const ref = useRef(null);
+  const ref      = useRef(null);
   const isInView = useInView(ref, { once: true, amount: 0.1 });
 
   return (
-    <section
-      ref={ref}
-      id="journey"
-      className="py-24 bg-background relative overflow-hidden"
-    >
-      {/* Background Glow */}
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-primary/5 rounded-full blur-3xl" />
+    <section ref={ref} id="journey" className="py-24 relative overflow-hidden">
+      {/* Ambient glow */}
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] opacity-5 pointer-events-none"
+        style={{ background: "radial-gradient(circle, #00ff88 0%, transparent 70%)", filter: "blur(80px)" }} />
 
-      <div className="container mx-auto px-4 relative z-10">
+      <div className="container mx-auto px-4 md:px-8 relative z-10">
+        {/* Header */}
         <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          animate={isInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.6 }}
-          className="text-center mb-16"
+          className="mb-12"
+          initial={{ opacity: 0, x: -20 }}
+          animate={isInView ? { opacity: 1, x: 0 } : {}}
+          transition={{ duration: 0.5 }}
         >
-          <h2 className="text-4xl md:text-5xl font-bold mb-4">
-            My <span className="text-primary">Journey</span>
-          </h2>
-          <p className="text-muted-foreground max-w-2xl mx-auto text-lg">
-            From a passionate gamer to a multi-venture entrepreneur
-          </p>
+          <span className="cyber-label">
+            <span className="text-primary mr-1">06</span> Journey
+          </span>
+          <h2 className="font-display text-4xl md:text-5xl mt-3 text-foreground">My Journey</h2>
+          <div className="cyber-divider mt-3 max-w-xs" />
         </motion.div>
 
         {/* Timeline */}
         <div className="relative max-w-4xl mx-auto">
-          {/* Vertical Line */}
-          <div className="absolute left-4 md:left-1/2 top-0 bottom-0 w-0.5 bg-gradient-to-b from-primary via-primary/50 to-transparent" />
+          {/* Vertical line */}
+          <div
+            className="absolute left-4 md:left-1/2 top-0 bottom-0 w-px"
+            style={{ background: "linear-gradient(180deg, #00ff88, #00ff8840, transparent)", boxShadow: "0 0 6px #00ff88" }}
+          />
 
-          {milestones.map((milestone, index) => {
-            const Icon = milestone.icon;
-            const isLeft = index % 2 === 0;
-
+          {milestones.map((m, i) => {
+            const isLeft = i % 2 === 0;
             return (
               <motion.div
-                key={index}
-                initial={{ opacity: 0, x: isLeft ? -50 : 50 }}
+                key={i}
+                className={`relative flex items-start mb-10 ${isLeft ? "md:flex-row" : "md:flex-row-reverse"}`}
+                initial={{ opacity: 0, x: isLeft ? -30 : 30 }}
                 animate={isInView ? { opacity: 1, x: 0 } : {}}
-                transition={{ duration: 0.6, delay: index * 0.15 }}
-                className={`relative flex items-center mb-12 ${
-                  isLeft ? "md:flex-row" : "md:flex-row-reverse"
-                }`}
+                transition={{ duration: 0.5, delay: i * 0.1 }}
               >
-                {/* Timeline Dot */}
-                <div className="absolute left-4 md:left-1/2 w-4 h-4 -translate-x-1/2 rounded-full bg-primary shadow-lg shadow-primary/50 z-10" />
-
-                {/* Content Card */}
+                {/* Timeline dot */}
                 <div
-                  className={`ml-12 md:ml-0 md:w-[calc(50%-40px)] ${
-                    isLeft ? "md:pr-8" : "md:pl-8"
-                  }`}
-                >
+                  className="absolute left-4 md:left-1/2 w-3 h-3 -translate-x-1/2 mt-5 border-2 border-primary bg-background"
+                  style={{ boxShadow: `0 0 8px ${m.color}, 0 0 16px ${m.color}60`, borderColor: m.color }}
+                />
+
+                {/* Card */}
+                <div className={`ml-12 md:ml-0 md:w-[calc(50%-32px)] ${isLeft ? "md:pr-8" : "md:pl-8"}`}>
                   <motion.div
-                    whileHover={{ scale: 1.02 }}
-                    className="bg-card/50 backdrop-blur-sm border border-border/50 rounded-2xl p-6 hover:border-primary/30 transition-all duration-300 group"
+                    className="cyber-card p-5 group"
+                    style={{ borderColor: `${m.color}20` }}
+                    whileHover={{ boxShadow: `0 0 10px ${m.color}, 0 0 20px ${m.color}60`, borderColor: m.color }}
                   >
                     {/* Header */}
-                    <div className="flex items-center gap-4 mb-4">
+                    <div className="flex items-center gap-3 mb-3">
                       <div
-                        className={`w-12 h-12 rounded-xl bg-gradient-to-br ${milestone.color} flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform`}
+                        className="w-10 h-10 flex items-center justify-center border cyber-chamfer-sm flex-shrink-0"
+                        style={{ borderColor: `${m.color}60`, background: `${m.color}10` }}
                       >
-                        <Icon className="w-6 h-6 text-white" />
+                        <m.icon
+                          className="w-5 h-5"
+                          style={{ color: m.color, filter: `drop-shadow(0 0 4px ${m.color})` }}
+                          strokeWidth={1.5}
+                        />
                       </div>
                       <div>
-                        <span className="text-primary font-semibold">
-                          {milestone.month} {milestone.year}
+                        <span className="font-mono text-xs tracking-widest" style={{ color: m.color }}>
+                          {m.month} {m.year}
                         </span>
-                        <h3 className="text-xl font-bold">{milestone.title}</h3>
+                        <h3 className="font-display text-base tracking-wide text-foreground">{m.title}</h3>
                       </div>
                     </div>
-
-                    {/* Description */}
-                    <p className="text-muted-foreground mb-4 leading-relaxed">
-                      {milestone.description}
-                    </p>
-
-                    {/* Achievement Tags */}
-                    <div className="flex flex-wrap gap-2">
-                      {milestone.achievements.map((achievement, i) => (
+                    <p className="font-mono text-xs text-muted-foreground leading-relaxed mb-3">{m.description}</p>
+                    <div className="flex flex-wrap gap-1.5">
+                      {m.tags.map((tag) => (
                         <span
-                          key={i}
-                          className="px-3 py-1 text-xs font-medium bg-primary/10 text-primary rounded-full"
+                          key={tag}
+                          className="font-mono text-[10px] px-2 py-0.5 border uppercase tracking-wider"
+                          style={{ color: m.color, borderColor: `${m.color}40`, background: `${m.color}10` }}
                         >
-                          {achievement}
+                          {tag}
                         </span>
                       ))}
                     </div>

@@ -38,8 +38,14 @@ const MatrixRain = ({ isActive, onDeactivate }: MatrixRainProps) => {
     }
 
     let animationId: number;
+    let frameCount = 0;
     
     const draw = () => {
+      animationId = requestAnimationFrame(draw);
+      // Run at ~30fps instead of 60fps
+      frameCount++;
+      if (frameCount % 2 !== 0) return;
+
       // Semi-transparent black to create trail effect
       ctx.fillStyle = "rgba(0, 0, 0, 0.05)";
       ctx.fillRect(0, 0, canvas.width, canvas.height);
@@ -62,8 +68,6 @@ const MatrixRain = ({ isActive, onDeactivate }: MatrixRainProps) => {
 
         drops[i]++;
       }
-
-      animationId = requestAnimationFrame(draw);
     };
 
     draw();

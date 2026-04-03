@@ -5,131 +5,133 @@ interface LoadingScreenProps {
   onLoadingComplete: () => void;
 }
 
+const BOOT_LINES = [
+  "INITIALIZING NEURAL INTERFACE...",
+  "LOADING KERNEL MODULES...",
+  "ESTABLISHING SECURE CHANNEL...",
+  "DECRYPTING PORTFOLIO DATA...",
+  "BYPASSING FIREWALL...",
+  "ACCESS GRANTED.",
+];
+
 const LoadingScreen = ({ onLoadingComplete }: LoadingScreenProps) => {
   const [progress, setProgress] = useState(0);
+  const [visibleLines, setVisibleLines] = useState<number>(0);
+
+  useEffect(() => {
+    const lineInterval = setInterval(() => {
+      setVisibleLines((prev) => {
+        if (prev >= BOOT_LINES.length) { clearInterval(lineInterval); return prev; }
+        return prev + 1;
+      });
+    }, 280);
+    return () => clearInterval(lineInterval);
+  }, []);
 
   useEffect(() => {
     const interval = setInterval(() => {
       setProgress((prev) => {
         if (prev >= 100) {
           clearInterval(interval);
-          setTimeout(onLoadingComplete, 500);
+          setTimeout(onLoadingComplete, 600);
           return 100;
         }
-        return prev + 2;
+        return prev + 1.5;
       });
-    }, 30);
-
+    }, 25);
     return () => clearInterval(interval);
   }, [onLoadingComplete]);
 
   return (
     <motion.div
-      className="fixed inset-0 z-[100] flex flex-col items-center justify-center bg-background"
+      className="fixed inset-0 z-[100] flex flex-col items-center justify-center bg-background cyber-grid"
       exit={{ opacity: 0 }}
-      transition={{ duration: 0.8, ease: "easeInOut" }}
+      transition={{ duration: 0.6 }}
     >
-      {/* Animated Background */}
-      <div className="absolute inset-0 overflow-hidden">
-        <motion.div
-          className="absolute top-1/2 left-1/2 w-[600px] h-[600px] rounded-full"
-          style={{
-            background: "radial-gradient(circle, hsl(357 83% 47% / 0.15) 0%, transparent 70%)",
-            transform: "translate(-50%, -50%)",
-          }}
-          animate={{
-            scale: [1, 1.2, 1],
-            opacity: [0.5, 0.8, 0.5],
-          }}
-          transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
-        />
-      </div>
+      {/* Radial glow */}
+      <div
+        className="absolute inset-0 pointer-events-none"
+        style={{
+          background: "radial-gradient(ellipse 60% 50% at 50% 50%, rgba(0,255,136,0.06) 0%, transparent 70%)",
+        }}
+      />
 
-      {/* Logo Animation */}
+      {/* Logo */}
       <motion.div
-        className="relative z-10 mb-8"
-        initial={{ opacity: 0, scale: 0.5 }}
+        className="relative mb-10"
+        initial={{ opacity: 0, scale: 0.8 }}
         animate={{ opacity: 1, scale: 1 }}
-        transition={{ duration: 0.8, ease: "easeOut" }}
+        transition={{ duration: 0.5 }}
       >
-        <motion.div
-          className="relative"
-          animate={{ rotateY: [0, 360] }}
-          transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
-          style={{ transformStyle: "preserve-3d" }}
+        <div
+          className="w-20 h-20 flex items-center justify-center border-2 border-primary cyber-chamfer"
+          style={{ boxShadow: "0 0 10px #00ff88, 0 0 20px #00ff8860, 0 0 40px #00ff8830" }}
         >
-          <div className="w-24 h-24 rounded-2xl bg-gradient-to-br from-primary to-primary/60 flex items-center justify-center shadow-2xl"
-               style={{ boxShadow: "0 0 60px hsl(357 83% 47% / 0.4)" }}>
-            <span className="font-display text-5xl text-white">N</span>
-          </div>
-        </motion.div>
+          <span className="font-display text-3xl text-primary">N</span>
+        </div>
+        {/* Corner accents */}
+        <span className="absolute -top-1 -left-1 w-3 h-3 border-t-2 border-l-2 border-primary" />
+        <span className="absolute -top-1 -right-1 w-3 h-3 border-t-2 border-r-2 border-primary" />
+        <span className="absolute -bottom-1 -left-1 w-3 h-3 border-b-2 border-l-2 border-primary" />
+        <span className="absolute -bottom-1 -right-1 w-3 h-3 border-b-2 border-r-2 border-primary" />
       </motion.div>
 
-      {/* Name Animation */}
+      {/* Boot log terminal */}
       <motion.div
-        className="relative z-10 overflow-hidden mb-8"
+        className="w-full max-w-sm mb-8 px-4"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
-        transition={{ delay: 0.3, duration: 0.6 }}
+        transition={{ delay: 0.3 }}
       >
-        <motion.h1
-          className="font-display text-4xl md:text-5xl tracking-wider"
-          initial={{ y: 50 }}
-          animate={{ y: 0 }}
-          transition={{ delay: 0.4, duration: 0.6 }}
+        <div className="terminal-header mb-0 rounded-none">
+          <span className="terminal-dot bg-[#ff3366]" />
+          <span className="terminal-dot bg-[#ffcc00]" />
+          <span className="terminal-dot bg-[#00ff88]" />
+          <span className="font-mono text-xs text-muted-foreground ml-2">boot.sys</span>
+        </div>
+        <div
+          className="border border-t-0 border-border bg-card p-4 font-mono text-xs space-y-1"
+          style={{ minHeight: "140px" }}
         >
-          <span className="gradient-text-red text-glow">NISHANT CHAUHAN</span>
-        </motion.h1>
+          {BOOT_LINES.slice(0, visibleLines).map((line, i) => (
+            <motion.div
+              key={i}
+              className={i === BOOT_LINES.length - 1 ? "text-primary" : "text-muted-foreground"}
+              initial={{ opacity: 0, x: -10 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.2 }}
+            >
+              <span className="text-primary mr-2">{">"}</span>
+              {line}
+            </motion.div>
+          ))}
+          {visibleLines < BOOT_LINES.length && (
+            <span className="inline-block w-2 h-4 bg-primary animate-blink" />
+          )}
+        </div>
       </motion.div>
 
-      {/* Progress Bar */}
+      {/* Progress bar */}
       <motion.div
-        className="relative z-10 w-64 h-1 bg-muted rounded-full overflow-hidden"
-        initial={{ opacity: 0, scaleX: 0 }}
-        animate={{ opacity: 1, scaleX: 1 }}
-        transition={{ delay: 0.6, duration: 0.4 }}
-      >
-        <motion.div
-          className="h-full rounded-full"
-          style={{ background: "var(--gradient-red)" }}
-          initial={{ width: 0 }}
-          animate={{ width: `${progress}%` }}
-          transition={{ duration: 0.1 }}
-        />
-      </motion.div>
-
-      {/* Loading Text */}
-      <motion.p
-        className="relative z-10 mt-4 text-muted-foreground text-sm"
+        className="w-full max-w-sm px-4"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
-        transition={{ delay: 0.8, duration: 0.4 }}
+        transition={{ delay: 0.5 }}
       >
-        Loading Experience...
-      </motion.p>
-
-      {/* Decorative Elements */}
-      <motion.div
-        className="absolute bottom-10 left-1/2 -translate-x-1/2 flex gap-2"
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 1, duration: 0.6 }}
-      >
-        {[0, 1, 2].map((i) => (
+        <div className="flex justify-between font-mono text-xs text-muted-foreground mb-1">
+          <span>LOADING</span>
+          <span className="text-primary">{Math.round(progress)}%</span>
+        </div>
+        <div className="h-1 bg-border w-full">
           <motion.div
-            key={i}
-            className="w-2 h-2 rounded-full bg-primary"
-            animate={{
-              scale: [1, 1.5, 1],
-              opacity: [0.5, 1, 0.5],
-            }}
-            transition={{
-              duration: 1,
-              repeat: Infinity,
-              delay: i * 0.2,
+            className="h-full bg-primary"
+            style={{
+              width: `${progress}%`,
+              boxShadow: "0 0 6px #00ff88",
+              transition: "width 0.05s linear",
             }}
           />
-        ))}
+        </div>
       </motion.div>
     </motion.div>
   );

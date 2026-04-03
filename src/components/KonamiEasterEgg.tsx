@@ -1,6 +1,6 @@
 import { motion, AnimatePresence } from "framer-motion";
 import { useKonamiCode } from "@/hooks/useKonamiCode";
-import { Gamepad2, X, Sparkles } from "lucide-react";
+import { Gamepad2, X } from "lucide-react";
 
 const KonamiEasterEgg = () => {
   const { isActivated, setIsActivated } = useKonamiCode(() => {
@@ -11,87 +11,70 @@ const KonamiEasterEgg = () => {
     <AnimatePresence>
       {isActivated && (
         <motion.div
-          className="fixed inset-0 z-[100] flex items-center justify-center bg-black/90 backdrop-blur-md"
+          className="fixed inset-0 z-[100] flex items-center justify-center bg-background/95 backdrop-blur-sm cyber-grid"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
         >
-          {/* Confetti effect */}
-          {[...Array(50)].map((_, i) => (
+          {/* Confetti particles */}
+          {[...Array(40)].map((_, i) => (
             <motion.div
               key={i}
-              className="absolute w-3 h-3 rounded-full"
+              className="absolute w-1.5 h-1.5"
               style={{
-                background: `hsl(${Math.random() * 360}, 80%, 60%)`,
+                background: ["#00ff88", "#ff00ff", "#00d4ff", "#ffcc00"][i % 4],
                 left: `${Math.random() * 100}%`,
+                boxShadow: `0 0 4px ${["#00ff88", "#ff00ff", "#00d4ff", "#ffcc00"][i % 4]}`,
               }}
               initial={{ y: -20, opacity: 1 }}
-              animate={{
-                y: window.innerHeight + 20,
-                rotate: Math.random() * 720,
-                opacity: 0,
-              }}
-              transition={{
-                duration: 2 + Math.random() * 2,
-                delay: Math.random() * 0.5,
-                ease: "linear",
-              }}
+              animate={{ y: window.innerHeight + 20, rotate: Math.random() * 720, opacity: 0 }}
+              transition={{ duration: 2 + Math.random() * 2, delay: Math.random() * 0.5, ease: "linear" }}
             />
           ))}
 
           <motion.div
-            className="relative bg-gradient-to-br from-primary/20 to-purple-600/20 border border-primary/50 rounded-3xl p-12 max-w-lg mx-4 text-center"
-            initial={{ scale: 0, rotate: -10 }}
-            animate={{ scale: 1, rotate: 0 }}
-            exit={{ scale: 0, rotate: 10 }}
-            transition={{ type: "spring", damping: 15 }}
+            className="relative cyber-card p-10 max-w-md mx-4 text-center"
+            style={{ borderColor: "#00ff88", boxShadow: "0 0 20px #00ff88, 0 0 40px #00ff8840" }}
+            initial={{ scale: 0.8, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            exit={{ scale: 0.8, opacity: 0 }}
+            transition={{ type: "spring", damping: 20 }}
           >
             <button
               onClick={() => setIsActivated(false)}
-              className="absolute top-4 right-4 p-2 rounded-full bg-white/10 hover:bg-white/20 transition-colors"
+              className="absolute top-4 right-4 w-7 h-7 border border-border flex items-center justify-center text-muted-foreground hover:border-primary hover:text-primary transition-colors"
             >
-              <X className="w-5 h-5" />
+              <X className="w-3.5 h-3.5" />
             </button>
 
             <motion.div
-              animate={{ rotate: [0, 10, -10, 0] }}
+              animate={{ rotate: [0, 8, -8, 0] }}
               transition={{ duration: 0.5, repeat: Infinity, repeatDelay: 1 }}
             >
-              <Gamepad2 className="w-20 h-20 mx-auto mb-6 text-primary" />
+              <Gamepad2
+                className="w-16 h-16 mx-auto mb-5 text-primary"
+                style={{ filter: "drop-shadow(0 0 10px #00ff88)" }}
+                strokeWidth={1.5}
+              />
             </motion.div>
 
-            <motion.h2
-              className="font-display text-4xl mb-4 gradient-text"
-              animate={{ scale: [1, 1.05, 1] }}
-              transition={{ duration: 1, repeat: Infinity }}
-            >
-              🎮 KONAMI CODE!
-            </motion.h2>
-
-            <p className="text-lg text-muted-foreground mb-6">
-              You found the secret! You are a true gamer.
+            <h2 className="font-display text-3xl mb-3 text-primary" style={{ textShadow: "0 0 20px #00ff88" }}>
+              KONAMI CODE
+            </h2>
+            <p className="font-mono text-sm text-muted-foreground mb-5">
+              <span className="text-primary">{">"}</span> Achievement unlocked. You are a true gamer.
             </p>
 
-            <div className="flex items-center justify-center gap-2 text-primary">
-              <Sparkles className="w-5 h-5" />
-              <span className="font-semibold">Achievement Unlocked</span>
-              <Sparkles className="w-5 h-5" />
+            <div className="font-mono text-xs text-muted-foreground border border-border p-3 mb-6">
+              ↑ ↑ ↓ ↓ ← → ← → B A
             </div>
 
-            <div className="mt-6 p-4 bg-black/30 rounded-xl">
-              <p className="text-sm text-muted-foreground font-mono">
-                ↑ ↑ ↓ ↓ ← → ← → B A
-              </p>
-            </div>
-
-            <motion.button
+            <button
               onClick={() => setIsActivated(false)}
-              className="mt-6 btn-primary"
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
+              className="btn-cyber w-full"
             >
               Continue Exploring
-            </motion.button>
+            </button>
           </motion.div>
         </motion.div>
       )}

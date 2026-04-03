@@ -2,295 +2,629 @@
 @tailwind components;
 @tailwind utilities;
 
-@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@300;400;500;600;700&display=swap');
-
 @layer base {
   :root {
-    /* Light theme */
-    --background: 0 0% 98%;
-    --foreground: 0 0% 9%;
+    /* Cyberpunk Dark — mandatory */
+    --background:       222 20% 4%;    /* #0a0a0f */
+    --foreground:       0 0% 88%;      /* #e0e0e0 */
 
-    --card: 0 0% 100%;
-    --card-foreground: 0 0% 9%;
+    --card:             240 18% 8%;    /* #12121a */
+    --card-foreground:  0 0% 88%;
 
-    --popover: 0 0% 100%;
-    --popover-foreground: 0 0% 9%;
+    --popover:          240 18% 8%;
+    --popover-foreground: 0 0% 88%;
 
-    /* Crimson Netflix Red */
-    --primary: 357 83% 47%;
-    --primary-foreground: 0 0% 100%;
+    /* PRIMARY NEON — Electric Green */
+    --primary:          151 100% 50%;  /* #00ff88 */
+    --primary-foreground: 240 18% 8%;
 
-    --secondary: 0 0% 94%;
-    --secondary-foreground: 0 0% 9%;
+    --secondary:        240 20% 11%;   /* #1c1c2e */
+    --secondary-foreground: 0 0% 88%;
 
-    --muted: 0 0% 90%;
-    --muted-foreground: 0 0% 40%;
+    --muted:            240 20% 11%;
+    --muted-foreground: 220 9% 46%;    /* #6b7280 */
 
-    --accent: 357 83% 47%;
-    --accent-foreground: 0 0% 100%;
+    --accent:           151 100% 50%;
+    --accent-foreground: 240 18% 8%;
 
-    --destructive: 0 84% 60%;
-    --destructive-foreground: 0 0% 98%;
+    --destructive:      345 100% 60%;  /* #ff3366 */
+    --destructive-foreground: 0 0% 88%;
 
-    --border: 0 0% 85%;
-    --input: 0 0% 90%;
-    --ring: 357 83% 47%;
+    --border:           240 15% 18%;   /* #2a2a3a */
+    --input:            240 18% 8%;
+    --ring:             151 100% 50%;
 
-    --radius: 0.5rem;
+    --radius: 4px;
 
-    /* Custom tokens - Light */
-    --glow-primary: 0 0% 0% / 0;
-    --gradient-hero: linear-gradient(180deg, transparent 0%, hsl(0 0% 98%) 100%);
-    --gradient-card: linear-gradient(145deg, hsl(0 0% 100%) 0%, hsl(0 0% 96%) 100%);
-    --gradient-red: linear-gradient(135deg, hsl(357 83% 47%) 0%, hsl(357 90% 35%) 100%);
-    --shadow-glow: 0 0 40px hsl(357 83% 47% / 0.2);
-    --shadow-card: 0 8px 32px hsl(0 0% 0% / 0.1);
+    /* Neon color raw values for use in shadows */
+    --neon-green:   #00ff88;
+    --neon-magenta: #ff00ff;
+    --neon-cyan:    #00d4ff;
+    --neon-red:     #ff3366;
   }
 
-  .dark {
-    /* Premium Crimson Dark Theme */
-    --background: 0 0% 2%;
-    --foreground: 0 0% 98%;
+  /* Force dark — this design system is dark-only */
+  html { color-scheme: dark; }
 
-    --card: 0 0% 4%;
-    --card-foreground: 0 0% 98%;
+  * { @apply border-border; }
 
-    --popover: 0 0% 4%;
-    --popover-foreground: 0 0% 98%;
-
-    /* Premium Crimson */
-    --primary: 357 83% 40%;
-    --primary-foreground: 0 0% 100%;
-
-    --secondary: 0 0% 8%;
-    --secondary-foreground: 0 0% 98%;
-
-    --muted: 0 0% 12%;
-    --muted-foreground: 0 0% 60%;
-
-    --accent: 357 83% 40%;
-    --accent-foreground: 0 0% 100%;
-
-    --destructive: 0 84% 60%;
-    --destructive-foreground: 0 0% 98%;
-
-    --border: 0 0% 14%;
-    --input: 0 0% 12%;
-    --ring: 357 83% 40%;
-
-    /* Custom tokens - Dark */
-    --glow-primary: 0 0% 0% / 0;
-    --gradient-hero: linear-gradient(180deg, transparent 0%, hsl(0 0% 2%) 100%);
-    --gradient-card: linear-gradient(145deg, hsl(0 0% 6%) 0%, hsl(0 0% 4%) 100%);
-    --gradient-red: linear-gradient(135deg, hsl(357 83% 35%) 0%, hsl(357 90% 25%) 100%);
-    --shadow-glow: 0 0 40px hsl(357 83% 40% / 0.2);
-    --shadow-card: 0 8px 32px hsl(0 0% 0% / 0.6);
-  }
-}
-
-@layer base {
-  * {
-    @apply border-border;
-  }
-
-  html {
-    scroll-behavior: smooth;
-  }
+  html { scroll-behavior: smooth; }
 
   body {
-    @apply bg-background text-foreground font-sans antialiased;
-    font-family: 'Inter', sans-serif;
+    @apply bg-background text-foreground antialiased;
+    font-family: "JetBrains Mono", "Fira Code", "Consolas", monospace;
+    position: relative;
   }
 
-  h1, h2, h3, .font-display {
-    font-family: 'Bebas Neue', sans-serif;
+  /* Global scanline overlay — GPU-composited, pointer-events off */
+  body::after {
+    content: "";
+    position: fixed;
+    inset: 0;
+    background: repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 3px,
+      rgba(0, 0, 0, 0.08) 3px,
+      rgba(0, 0, 0, 0.08) 4px
+    );
+    pointer-events: none;
+    z-index: 9999;
+    will-change: auto;
+  }
+
+  h1, h2, h3, h4, .font-display {
+    font-family: "Orbitron", "Share Tech Mono", monospace;
     letter-spacing: 0.05em;
+    text-transform: uppercase;
   }
 }
 
 @layer components {
-  /* Netflix-style scrollbar */
-  ::-webkit-scrollbar {
-    width: 8px;
-    height: 8px;
+  /* ─── Scrollbar ─────────────────────────────────── */
+  ::-webkit-scrollbar { width: 6px; height: 6px; }
+  ::-webkit-scrollbar-track { background: hsl(var(--background)); }
+  ::-webkit-scrollbar-thumb {
+    background: hsl(var(--border));
+    border-radius: 0;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: var(--neon-green);
+    box-shadow: 0 0 6px var(--neon-green);
   }
 
-  ::-webkit-scrollbar-track {
+  /* ─── Chamfered corner clip-path ────────────────── */
+  .cyber-chamfer {
+    clip-path: polygon(
+      0 12px, 12px 0,
+      calc(100% - 12px) 0, 100% 12px,
+      100% calc(100% - 12px), calc(100% - 12px) 100%,
+      12px 100%, 0 calc(100% - 12px)
+    );
+  }
+
+  .cyber-chamfer-sm {
+    clip-path: polygon(
+      0 8px, 8px 0,
+      calc(100% - 8px) 0, 100% 8px,
+      100% calc(100% - 8px), calc(100% - 8px) 100%,
+      8px 100%, 0 calc(100% - 8px)
+    );
+  }
+
+  /* ─── Cards ─────────────────────────────────────── */
+  .cyber-card {
+    @apply relative bg-card border border-border transition-all duration-150;
+    clip-path: polygon(
+      0 12px, 12px 0,
+      calc(100% - 12px) 0, 100% 12px,
+      100% calc(100% - 12px), calc(100% - 12px) 100%,
+      12px 100%, 0 calc(100% - 12px)
+    );
+  }
+
+  .cyber-card:hover {
+    @apply border-primary;
+    box-shadow: 0 0 5px var(--neon-green), 0 0 10px #00ff8840;
+    transform: translateY(-1px);
+  }
+
+  /* Terminal card variant */
+  .cyber-card-terminal {
+    @apply cyber-card;
     background: hsl(var(--background));
   }
 
-  ::-webkit-scrollbar-thumb {
-    background: hsl(var(--muted));
-    border-radius: 4px;
+  .cyber-card-terminal::before {
+    content: "";
+    @apply absolute top-0 left-0 right-0 h-8 flex items-center;
+    background: hsl(var(--border));
+    z-index: 1;
   }
 
-  ::-webkit-scrollbar-thumb:hover {
-    background: hsl(var(--primary));
+  /* Holographic card */
+  .cyber-card-holo {
+    @apply relative border transition-all duration-150;
+    background: rgba(28, 28, 46, 0.5);
+    border-color: rgba(0, 255, 136, 0.3);
+    box-shadow: 0 0 5px var(--neon-green), 0 0 10px #00ff8840;
+    clip-path: polygon(
+      0 12px, 12px 0,
+      calc(100% - 12px) 0, 100% 12px,
+      100% calc(100% - 12px), calc(100% - 12px) 100%,
+      12px 100%, 0 calc(100% - 12px)
+    );
   }
 
-  /* Horizontal scroll container */
+  /* Corner accent decorations for holo cards */
+  .cyber-card-holo::before,
+  .cyber-card-holo::after {
+    content: "";
+    @apply absolute w-3 h-3;
+    border-color: var(--neon-green);
+    border-style: solid;
+  }
+  .cyber-card-holo::before {
+    top: 4px; left: 4px;
+    border-width: 2px 0 0 2px;
+  }
+  .cyber-card-holo::after {
+    bottom: 4px; right: 4px;
+    border-width: 0 2px 2px 0;
+  }
+
+  /* ─── Generic hover glow ─────────────────────────── */
+  .hover-glow {
+    @apply transition-all duration-150;
+  }
+  .hover-glow:hover {
+    box-shadow: 0 0 8px var(--neon-green), 0 0 16px #00ff8840;
+    border-color: var(--neon-green);
+  }
+
+  /* ─── Enhanced card hover ────────────────────────── */
+  .cyber-card-hover {
+    @apply transition-all duration-200;
+  }
+  .cyber-card-hover:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 0 12px var(--neon-green), 0 0 24px #00ff8860, 0 8px 24px rgba(0,0,0,0.4);
+    border-color: var(--neon-green);
+  }
+
+  /* ─── Mobile touch targets ───────────────────────── */
+  @media (max-width: 640px) {
+    button, a, [role="button"] {
+      min-height: 44px;
+    }
+  }
+
+  /* ─── Smooth image rendering ─────────────────────── */
+  img {
+    image-rendering: -webkit-optimize-contrast;
+    image-rendering: crisp-edges;
+  }
+
+  /* ─── Buttons ────────────────────────────────────── */
+  .btn-cyber {
+    @apply relative inline-flex items-center justify-center gap-2 px-6 py-3;
+    @apply font-mono text-sm uppercase tracking-[0.2em] font-medium;
+    @apply border-2 border-primary text-primary bg-transparent;
+    @apply transition-all duration-150 cursor-pointer;
+    clip-path: polygon(
+      0 8px, 8px 0,
+      calc(100% - 8px) 0, 100% 8px,
+      100% calc(100% - 8px), calc(100% - 8px) 100%,
+      8px 100%, 0 calc(100% - 8px)
+    );
+  }
+
+  .btn-cyber:hover {
+    @apply bg-primary text-card;
+    box-shadow: 0 0 5px var(--neon-green), 0 0 10px #00ff8840;
+  }
+
+  .btn-cyber:focus-visible {
+    @apply outline-none ring-2 ring-primary ring-offset-2 ring-offset-background;
+  }
+
+  .btn-cyber-secondary {
+    @apply btn-cyber;
+    @apply border-[#ff00ff] text-[#ff00ff];
+  }
+  .btn-cyber-secondary:hover {
+    background: #ff00ff;
+    @apply text-card;
+    box-shadow: 0 0 5px #ff00ff, 0 0 20px #ff00ff60;
+  }
+
+  .btn-cyber-ghost {
+    @apply btn-cyber border-border text-foreground;
+  }
+  .btn-cyber-ghost:hover {
+    @apply border-primary text-primary;
+    box-shadow: 0 0 5px var(--neon-green), 0 0 10px #00ff8840;
+  }
+
+  .btn-cyber-solid {
+    @apply btn-cyber bg-primary text-card border-primary;
+  }
+  .btn-cyber-solid:hover {
+    filter: brightness(1.15);
+    box-shadow: 0 0 10px var(--neon-green), 0 0 20px #00ff8860, 0 0 40px #00ff8830;
+  }
+
+  /* ─── Inputs ─────────────────────────────────────── */
+  .cyber-input {
+    @apply w-full bg-input border border-border text-primary font-mono text-sm;
+    @apply placeholder:text-muted-foreground transition-all duration-150;
+    @apply pl-8 pr-4 py-3;
+    clip-path: polygon(
+      0 6px, 6px 0,
+      calc(100% - 6px) 0, 100% 6px,
+      100% calc(100% - 6px), calc(100% - 6px) 100%,
+      6px 100%, 0 calc(100% - 6px)
+    );
+  }
+
+  .cyber-input:focus {
+    @apply outline-none border-primary;
+    box-shadow: 0 0 5px var(--neon-green), 0 0 10px #00ff8840;
+  }
+
+  .cyber-input-wrapper {
+    @apply relative;
+  }
+
+  .cyber-input-wrapper::before {
+    content: ">";
+    @apply absolute left-3 top-1/2 -translate-y-1/2 text-primary font-mono text-sm font-bold;
+    pointer-events: none;
+  }
+
+  /* ─── Neon text ──────────────────────────────────── */
+  .text-neon {
+    color: var(--neon-green);
+    text-shadow: 0 0 10px rgba(0, 255, 136, 0.5), 0 0 20px rgba(0, 255, 136, 0.3);
+  }
+
+  .text-neon-magenta {
+    color: var(--neon-magenta);
+    text-shadow: 0 0 10px rgba(255, 0, 255, 0.5), 0 0 20px rgba(255, 0, 255, 0.3);
+  }
+
+  .text-neon-cyan {
+    color: var(--neon-cyan);
+    text-shadow: 0 0 10px rgba(0, 212, 255, 0.5), 0 0 20px rgba(0, 212, 255, 0.3);
+  }
+
+  /* ─── Glitch headline ────────────────────────────── */
+  .cyber-glitch {
+    position: relative;
+  }
+
+  .cyber-glitch::before,
+  .cyber-glitch::after {
+    content: attr(data-text);
+    position: absolute;
+    inset: 0;
+    font: inherit;
+    color: inherit;
+  }
+
+  .cyber-glitch::before {
+    text-shadow: -2px 0 var(--neon-magenta);
+    clip-path: polygon(0 20%, 100% 20%, 100% 40%, 0 40%);
+    animation: glitch-before 4s infinite;
+  }
+
+  .cyber-glitch::after {
+    text-shadow: 2px 0 var(--neon-cyan);
+    clip-path: polygon(0 60%, 100% 60%, 100% 80%, 0 80%);
+    animation: glitch-after 4s infinite 0.1s;
+  }
+
+  @keyframes glitch-before {
+    0%, 90%, 100% { transform: translate(0); opacity: 0; }
+    92%            { transform: translate(-3px, 1px); opacity: 1; }
+    94%            { transform: translate(3px, -1px); opacity: 1; }
+    96%            { transform: translate(-1px, 2px); opacity: 1; }
+    98%            { transform: translate(0); opacity: 0; }
+  }
+
+  @keyframes glitch-after {
+    0%, 90%, 100% { transform: translate(0); opacity: 0; }
+    92%            { transform: translate(3px, -1px); opacity: 1; }
+    94%            { transform: translate(-3px, 1px); opacity: 1; }
+    96%            { transform: translate(2px, -2px); opacity: 1; }
+    98%            { transform: translate(0); opacity: 0; }
+  }
+
+  /* ─── Circuit grid background ────────────────────── */
+  .cyber-grid {
+    background-image:
+      linear-gradient(rgba(0, 255, 136, 0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(0, 255, 136, 0.03) 1px, transparent 1px);
+    background-size: 50px 50px;
+    transform: translateZ(0);
+  }
+
+  /* ─── Section label / badge ──────────────────────── */
+  .cyber-label {
+    @apply inline-flex items-center gap-2 font-mono text-xs uppercase tracking-[0.3em] text-primary;
+    @apply border border-primary/30 px-3 py-1;
+    background: rgba(0, 255, 136, 0.05);
+    clip-path: polygon(0 4px, 4px 0, calc(100% - 4px) 0, 100% 4px, 100% calc(100% - 4px), calc(100% - 4px) 100%, 4px 100%, 0 calc(100% - 4px));
+  }
+
+  /* ─── Horizontal scroll row ──────────────────────── */
   .scroll-row {
     @apply flex gap-4 overflow-x-auto pb-4 px-4 md:px-12 lg:px-16;
     scrollbar-width: thin;
-    scrollbar-color: hsl(var(--muted)) transparent;
+    scrollbar-color: hsl(var(--border)) transparent;
   }
 
-  .scroll-row::-webkit-scrollbar {
-    height: 6px;
+  .scroll-row::-webkit-scrollbar { height: 4px; }
+  .scroll-row::-webkit-scrollbar-thumb { background: hsl(var(--border)); }
+  .scroll-row::-webkit-scrollbar-thumb:hover { background: var(--neon-green); }
+
+  /* ─── Section title ──────────────────────────────── */
+  .row-title {
+    @apply font-display text-2xl md:text-3xl tracking-widest text-foreground mb-4 px-4 md:px-12 lg:px-16;
   }
 
-  /* Card glow effect */
-  .card-glow {
-    @apply relative transition-all duration-300;
+  /* ─── Blinking cursor ────────────────────────────── */
+  .cyber-cursor::after {
+    content: "_";
+    @apply text-primary;
+    animation: blink 1s step-end infinite;
   }
 
-  .card-glow::before {
-    content: '';
-    @apply absolute inset-0 rounded-lg opacity-0 transition-opacity duration-300;
-    background: var(--gradient-red);
-    filter: blur(10px);
-    z-index: -1;
+  @keyframes blink { 50% { opacity: 0; } }
+
+  /* ─── Neon divider ───────────────────────────────── */
+  .cyber-divider {
+    @apply w-full h-px;
+    background: linear-gradient(90deg, transparent, var(--neon-green), transparent);
+    box-shadow: 0 0 6px var(--neon-green);
   }
 
-  .card-glow:hover::before {
-    @apply opacity-30;
+  /* ─── Terminal header bar ────────────────────────── */
+  .terminal-header {
+    @apply flex items-center gap-2 px-4 py-2 border-b border-border;
+    background: hsl(var(--border));
   }
 
-  .card-glow:hover {
-    transform: scale(1.05);
-    box-shadow: var(--shadow-glow);
+  .terminal-dot {
+    @apply w-3 h-3 rounded-full;
   }
 
-  /* Text glow */
-  .text-glow {
-    text-shadow: 0 0 20px hsl(357 83% 47% / 0.5);
+  /* ─── Stat card ──────────────────────────────────── */
+  .stat-card {
+    @apply cyber-card p-6 text-center;
   }
 
-  /* Gradient text */
+  .stat-card:hover {
+    box-shadow: 0 0 10px var(--neon-green), 0 0 20px #00ff8860;
+  }
+
+  /* ─── Skill badge ────────────────────────────────── */
+  .skill-badge {
+    @apply inline-flex items-center px-3 py-1 font-mono text-xs uppercase tracking-wider;
+    @apply border border-border text-muted-foreground bg-card;
+    @apply transition-all duration-150;
+    clip-path: polygon(0 4px, 4px 0, calc(100% - 4px) 0, 100% 4px, 100% calc(100% - 4px), calc(100% - 4px) 100%, 4px 100%, 0 calc(100% - 4px));
+  }
+
+  .skill-badge:hover {
+    @apply border-primary text-primary;
+    box-shadow: 0 0 5px var(--neon-green), 0 0 10px #00ff8840;
+  }
+
+  /* ─── Form input (legacy compat) ─────────────────── */
+  .form-input {
+    @apply cyber-input;
+  }
+
+  /* ─── Gradient text ──────────────────────────────── */
+  .gradient-text-red {
+    @apply bg-clip-text text-transparent;
+    background-image: linear-gradient(135deg, var(--neon-green) 0%, var(--neon-cyan) 100%);
+  }
+
   .gradient-text {
     @apply bg-clip-text text-transparent;
-    background-image: linear-gradient(135deg, hsl(0 0% 100%) 0%, hsl(0 0% 70%) 100%);
+    background-image: linear-gradient(135deg, #e0e0e0 0%, #6b7280 100%);
+  }
+
+  /* ─── Grain overlay (disabled) ───────────────────── */
+  .grain-overlay { display: none; }
+
+  /* ─── Legacy compatibility aliases ──────────────────
+     These map old Netflix-era class names to the new
+     cyberpunk equivalents so unchanged components work  */
+  :root {
+    --gradient-card:  linear-gradient(145deg, hsl(240 18% 8%) 0%, hsl(240 18% 6%) 100%);
+    --gradient-red:   linear-gradient(135deg, #00ff88 0%, #00d4ff 100%);
+    --shadow-glow:    0 0 10px #00ff88, 0 0 20px #00ff8860;
+  }
+
+  .card-glow {
+    @apply relative transition-all duration-150;
+  }
+  .card-glow:hover {
+    box-shadow: 0 0 10px var(--neon-green), 0 0 20px #00ff8840;
+    transform: translateY(-2px);
+  }
+
+  .text-glow {
+    text-shadow: 0 0 10px rgba(0, 255, 136, 0.5), 0 0 20px rgba(0, 255, 136, 0.3);
   }
 
   .gradient-text-red {
     @apply bg-clip-text text-transparent;
-    background-image: var(--gradient-red);
+    background-image: linear-gradient(135deg, var(--neon-green) 0%, var(--neon-cyan) 100%);
   }
 
-  /* Hero gradient overlay */
-  .hero-gradient {
-    background: linear-gradient(
-      180deg,
-      transparent 0%,
-      hsl(0 0% 4% / 0.4) 50%,
-      hsl(0 0% 4%) 100%
-    );
-  }
-
-  /* Animated underline */
-  .animated-underline {
-    @apply relative;
-  }
-
-  .animated-underline::after {
-    content: '';
-    @apply absolute bottom-0 left-0 w-0 h-0.5 bg-primary transition-all duration-300;
-  }
-
-  .animated-underline:hover::after {
-    @apply w-full;
-  }
-
-  /* Netflix row title */
-  .row-title {
-    @apply text-xl md:text-2xl font-display tracking-wider text-foreground mb-4 px-4 md:px-12 lg:px-16;
-  }
-
-  /* Skill badge */
-  .skill-badge {
-    @apply px-4 py-2 rounded-full text-sm font-medium transition-all duration-300;
-    background: var(--gradient-card);
-    border: 1px solid hsl(var(--border));
-  }
-
-  .skill-badge:hover {
-    @apply border-primary;
-    box-shadow: 0 0 20px hsl(357 83% 47% / 0.2);
-  }
-
-  /* Stat card */
-  .stat-card {
-    @apply p-6 rounded-xl text-center transition-all duration-300;
-    background: var(--gradient-card);
-    border: 1px solid hsl(var(--border));
-  }
-
-  .stat-card:hover {
-    @apply border-primary;
-    transform: translateY(-4px);
-    box-shadow: var(--shadow-glow);
-  }
-
-  /* Form input */
-  .form-input {
-    @apply w-full px-4 py-3 rounded-lg bg-secondary border border-border text-foreground placeholder:text-muted-foreground transition-all duration-300;
-  }
-
-  .form-input:focus {
-    @apply outline-none border-primary ring-2 ring-primary/20;
-  }
-
-  /* Button variants */
   .btn-primary {
-    @apply px-6 py-3 rounded-md font-semibold transition-all duration-300;
-    background: var(--gradient-red);
-  }
-
-  .btn-primary:hover {
-    box-shadow: var(--shadow-glow);
-    transform: scale(1.02);
+    @apply btn-cyber-solid;
   }
 
   .btn-secondary {
-    @apply px-6 py-3 rounded-md font-semibold bg-secondary text-foreground border border-border transition-all duration-300;
+    @apply btn-cyber-ghost;
   }
 
-  .btn-secondary:hover {
-    @apply border-primary bg-secondary/80;
+  /* ─── Generic hover glow ─────────────────────────── */
+  .hover-glow {
+    @apply transition-all duration-150;
+  }
+  .hover-glow:hover {
+    box-shadow: 0 0 8px var(--neon-green), 0 0 16px #00ff8840;
+    border-color: var(--neon-green);
   }
 
-  /* Remove heavy grain overlay for performance */
-  .grain-overlay {
-    display: none;
+  /* ─── Enhanced card hover ────────────────────────── */
+  .cyber-card-hover {
+    @apply transition-all duration-200;
+  }
+  .cyber-card-hover:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 0 12px var(--neon-green), 0 0 24px #00ff8860, 0 8px 24px rgba(0,0,0,0.4);
+    border-color: var(--neon-green);
+  }
+
+  /* ─── Mobile touch targets ───────────────────────── */
+  @media (max-width: 640px) {
+    button, a[href], [role="button"] {
+      min-height: 44px;
+    }
+  }
+
+  /* ─── Text shimmer ───────────────────────────────── */
+  .text-shimmer {
+    background: linear-gradient(
+      90deg,
+      var(--neon-green) 0%,
+      var(--neon-cyan) 25%,
+      var(--neon-green) 50%,
+      var(--neon-magenta) 75%,
+      var(--neon-green) 100%
+    );
+    background-size: 200% auto;
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: shimmer-text 3s linear infinite;
+  }
+
+  @keyframes shimmer-text {
+    0%   { background-position: 0% center; }
+    100% { background-position: 200% center; }
+  }
+
+  /* ─── Animated neon border ───────────────────────── */
+  .cyber-border-animated {
+    position: relative;
+  }
+  .cyber-border-animated::before {
+    content: "";
+    position: absolute;
+    inset: -1px;
+    background: linear-gradient(90deg, var(--neon-green), var(--neon-cyan), var(--neon-magenta), var(--neon-green));
+    background-size: 200% 100%;
+    animation: border-flow 3s linear infinite;
+    z-index: -1;
+    clip-path: polygon(
+      0 12px, 12px 0,
+      calc(100% - 12px) 0, 100% 12px,
+      100% calc(100% - 12px), calc(100% - 12px) 100%,
+      12px 100%, 0 calc(100% - 12px)
+    );
+  }
+
+  @keyframes border-flow {
+    0%   { background-position: 0% 50%; }
+    100% { background-position: 200% 50%; }
+  }
+
+  /* ─── Text shimmer ───────────────────────────────── */
+  .text-shimmer {
+    background: linear-gradient(
+      90deg,
+      var(--neon-green) 0%,
+      var(--neon-cyan) 25%,
+      var(--neon-green) 50%,
+      var(--neon-magenta) 75%,
+      var(--neon-green) 100%
+    );
+    background-size: 200% auto;
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: shimmer 3s linear infinite;
+  }
+
+  @keyframes shimmer {
+    0%   { background-position: 0% center; }
+    100% { background-position: 200% center; }
   }
 }
 
 @layer utilities {
-  .animate-float {
-    animation: float 6s ease-in-out infinite;
+  /* Reduced motion */
+  @media (prefers-reduced-motion: reduce) {
+    .cyber-glitch::before,
+    .cyber-glitch::after { animation: none; opacity: 0; }
+    .animate-glitch { animation: none; }
+    .animate-rgb-shift { animation: none; }
+    .animate-scanline { animation: none; }
+    .animate-float { animation: none !important; }
+    .animate-pulse-neon { animation: none !important; }
+    .text-shimmer { animation: none !important; }
   }
 
+  /* Mobile: remove clip-path on cyber-card to prevent overflow issues */
+  @media (max-width: 640px) {
+    .cyber-card {
+      clip-path: none;
+      border-radius: 4px;
+    }
+    .cyber-card-holo {
+      clip-path: none;
+      border-radius: 4px;
+    }
+  }
+
+  /* Float animation */
   @keyframes float {
-    0%, 100% { transform: translateY(0); }
-    50% { transform: translateY(-10px); }
+    0%, 100% { transform: translateY(0px); }
+    50%       { transform: translateY(-8px); }
   }
 
-  .animate-pulse-glow {
-    animation: pulse-glow 2s ease-in-out infinite;
+  .animate-float {
+    animation: float 3s ease-in-out infinite;
   }
 
-  @keyframes pulse-glow {
-    0%, 100% { box-shadow: 0 0 20px hsl(357 83% 47% / 0.3); }
-    50% { box-shadow: 0 0 40px hsl(357 83% 47% / 0.5); }
+  /* Neon pulse animation */
+  @keyframes pulse-neon {
+    0%, 100% { box-shadow: 0 0 5px var(--neon-green), 0 0 10px #00ff8840; }
+    50%       { box-shadow: 0 0 15px var(--neon-green), 0 0 30px #00ff8880, 0 0 45px #00ff8840; }
   }
 
-  .animate-gradient {
-    background-size: 200% 200%;
-    animation: gradient-shift 8s ease infinite;
+  .animate-pulse-neon {
+    animation: pulse-neon 2s ease-in-out infinite;
   }
 
-  @keyframes gradient-shift {
-    0%, 100% { background-position: 0% 50%; }
-    50% { background-position: 100% 50%; }
+  /* Content visibility for off-screen sections — big perf win */
+  .section-lazy {
+    content-visibility: auto;
+    contain-intrinsic-size: 0 600px;
+  }
+
+  /* Prevent layout thrash on animated elements */
+  .cyber-card,
+  .cyber-card-terminal,
+  .cyber-card-holo {
+    contain: layout style;
   }
 }

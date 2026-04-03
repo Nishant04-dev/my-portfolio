@@ -2,77 +2,91 @@ import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { ArrowUp } from "lucide-react";
 
+const sections = [
+  { id: "about",    label: "About" },
+  { id: "skills",   label: "Skills" },
+  { id: "projects", label: "Projects" },
+  { id: "journey",  label: "Journey" },
+  { id: "contact",  label: "Contact" },
+];
+
 const ScrollProgress = () => {
-  const [scrollProgress, setScrollProgress] = useState(0);
-  const [showBackToTop, setShowBackToTop] = useState(false);
+  const [progress, setProgress]             = useState(0);
+  const [showTop, setShowTop]               = useState(false);
+  const [currentSection, setCurrentSection] = useState<string | null>(null);
 
   useEffect(() => {
-    const handleScroll = () => {
-      const scrollTop = window.scrollY;
-      const docHeight = document.documentElement.scrollHeight - window.innerHeight;
-      const progress = (scrollTop / docHeight) * 100;
-      setScrollProgress(progress);
-      setShowBackToTop(scrollTop > 500);
+    const onScroll = () => {
+      const top = window.scrollY;
+      const max = document.documentElement.scrollHeight - window.innerHeight;
+      setProgress((top / max) * 100);
+      setShowTop(top > 300);
     };
-
-    window.addEventListener("scroll", handleScroll, { passive: true });
-    return () => window.removeEventListener("scroll", handleScroll);
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
-  const scrollToTop = () => {
-    window.scrollTo({ top: 0, behavior: "smooth" });
-  };
+  useEffect(() => {
+    const observers: IntersectionObserver[] = [];
+    sections.forEach(({ id }) => {
+      const el = document.getElementById(id);
+      if (!el) return;
+      const obs = new IntersectionObserver(
+        ([entry]) => { if (entry.isIntersecting) setCurrentSection(id); },
+        { rootMargin: "-30% 0px -60% 0px", threshold: 0 }
+      );
+      obs.observe(el);
+      observers.push(obs);
+    });
+    return () => observers.forEach((o) => o.disconnect());
+  }, []);
+
+  const sectionLabel = sections.find((s) => s.id === currentSection)?.label ?? null;
 
   return (
     <>
-      {/* Progress Bar */}
-      <motion.div
-        className="fixed top-0 left-0 right-0 h-1 bg-background/50 backdrop-blur-sm z-[100]"
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 1 }}
-      >
-        <motion.div
-          className="h-full bg-gradient-to-r from-primary via-primary to-red-700"
-          style={{ width: `${scrollProgress}%` }}
-          transition={{ duration: 0.1 }}
+      {/* Progress bar */}
+      <div className="fixed top-0 left-0 right-0 h-[2px] bg-border z-[100]">
+        <div
+          className="h-full bg-primary transition-[width] duration-100"
+          style={{ width: `${progress}%`, boxShadow: "0 0 6px #00ff88, 0 0 12px #00ff8840" }}
         />
-        {/* Glow effect at the end */}
-        <motion.div
-          className="absolute top-0 h-full w-8 bg-gradient-to-r from-transparent to-primary/50 blur-sm"
-          style={{ left: `calc(${scrollProgress}% - 32px)` }}
-        />
-      </motion.div>
+      </div>
 
-      {/* Back to Top Button */}
+      {/* Currently reading section indicator */}
       <AnimatePresence>
-        {showBackToTop && (
-          <motion.button
-            initial={{ opacity: 0, scale: 0.5, y: 20 }}
-            animate={{ opacity: 1, scale: 1, y: 0 }}
-            exit={{ opacity: 0, scale: 0.5, y: 20 }}
-            whileHover={{ scale: 1.1 }}
-            whileTap={{ scale: 0.9 }}
-            onClick={scrollToTop}
-            className="fixed bottom-24 right-8 w-12 h-12 bg-primary text-primary-foreground rounded-full shadow-lg shadow-primary/30 flex items-center justify-center z-[100] hover:bg-primary/90 transition-colors"
-            aria-label="Back to top"
+        {sectionLabel && (
+          <motion.div
+            key={sectionLabel}
+            className="fixed top-4 left-1/2 -translate-x-1/2 z-[99] pointer-events-none"
+            initial={{ opacity: 0, y: -8 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -8 }}
+            transition={{ duration: 0.25 }}
           >
-            <ArrowUp className="w-5 h-5" />
-          </motion.button>
+            <span className="font-mono text-[10px] uppercase tracking-[0.3em] text-primary/60 bg-background/80 px-3 py-1 border border-primary/20">
+              {sectionLabel}
+            </span>
+          </motion.div>
         )}
       </AnimatePresence>
 
-      {/* Scroll Percentage Indicator */}
+      {/* Back to top */}
       <AnimatePresence>
-        {showBackToTop && (
-          <motion.div
-            initial={{ opacity: 0, x: 20 }}
-            animate={{ opacity: 1, x: 0 }}
-            exit={{ opacity: 0, x: 20 }}
-            className="fixed bottom-[6.5rem] right-[5.5rem] text-sm text-muted-foreground font-mono z-[100]"
+        {showTop && (
+          <motion.button
+            initial={{ opacity: 0, scale: 0.8 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 0.8 }}
+            whileHover={{ boxShadow: "0 0 10px #00ff88, 0 0 20px #00ff8860" }}
+            whileTap={{ scale: 0.9 }}
+            onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
+            className="fixed bottom-8 right-8 w-10 h-10 border border-primary bg-background flex items-center justify-center z-[100] text-primary transition-all duration-150"
+            style={{ clipPath: "polygon(0 6px, 6px 0, calc(100% - 6px) 0, 100% 6px, 100% calc(100% - 6px), calc(100% - 6px) 100%, 6px 100%, 0 calc(100% - 6px))" }}
+            aria-label="Back to top"
           >
-            {Math.round(scrollProgress)}%
-          </motion.div>
+            <ArrowUp className="w-4 h-4" strokeWidth={1.5} />
+          </motion.button>
         )}
       </AnimatePresence>
     </>
